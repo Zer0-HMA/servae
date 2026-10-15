@@ -1,0 +1,10 @@
+Un consejo para cuando crezca la info
+
+Ahorita los servicios están dentro del index.html en el <script id="servicios-data">.
+Cuando tengas mucha más información, te conviene 
+moverlos a un archivo aparte (por ejemplo servicios.json) y cargarlo con fetch().
+Así editas los datos sin tocar el diseño y el archivo principal no se vuelve gigante
+Funciona igual en Pages.
+
+Tu NAS lo puedes seguir usando para probar cambios antes de subirlos,
+para hacer respaldos del repo o para cuando quieras agregar algo con backend.

@@ -1,0 +1,185 @@
+[
+  {
+    "id": "pistas-aterrizaje-despegue",
+    "numero": 1,
+    "nombreTecnico": "Pistas de aterrizaje y despegue",
+    "nombreIngles": "Runways",
+    "categoria": "Infraestructura aeroportuaria",
+    "subcategoria": "Área de operación de aeronaves",
+    "descripcion": {
+      "queEs": "Superficie preparada y definida para que las aeronaves realicen aterrizajes y despegues.",
+      "paraQueSirve": "Permitir la transición segura entre vuelo y movimiento en tierra. La pista soporta las cargas de la aeronave y proporciona la distancia disponible para acelerar, despegar, aterrizar y desacelerar.",
+      "general": "Su diseño considera longitud, anchura, resistencia del pavimento, pendiente, drenaje, fricción, orientación y ayudas visuales, de acuerdo con el tipo de operación prevista."
+    },
+    "ubicacion": {
+      "zonaFisica": "Franja pavimentada del campo de vuelo, delimitada por umbrales y extremos; puede contar con zonas de seguridad asociadas y sistemas de iluminación.",
+      "lado": "aire",
+      "ladoDetalle": "Lado aire."
+    },
+    "responsable": {
+      "quienLoPresta": "Explotador/administrador del aeródromo: conserva la infraestructura y controla su disponibilidad. La autoridad aeronáutica certifica o supervisa según el marco nacional; ATC coordina el uso operacional.",
+      "ejemplos": "Pista 15/33 de un aeropuerto; pista principal para operaciones comerciales o pista secundaria para aviación general."
+    },
+    "equipos": [
+      "Pavimento de asfalto u hormigón",
+      "Marcas de eje, umbral, designación y zona de toma de contacto cuando corresponda",
+      "Luces de borde, umbral y extremo",
+      "Drenaje",
+      "Ayudas de aproximación",
+      "Equipos de inspección de pavimento y fricción"
+    ],
+    "normativa": [
+      {
+        "ambito": "OACI",
+        "texto": "Anexo 14, Vol. I (diseño y operación de aeródromos); Doc 9157, Manual de diseño de aeródromos."
+      },
+      {
+        "ambito": "FAA (referencia)",
+        "texto": "AC 150/5300-13B, Airport Design, como referencia técnica complementaria en EE. UU."
+      },
+      {
+        "ambito": "México",
+        "texto": "Ley de Aeropuertos, su Reglamento, las disposiciones vigentes de AFAC y las condiciones del certificado del aeródromo."
+      }
+    ],
+    "momentoOperativo": "Antes de cada operación, durante aterrizaje/despegue y en inspecciones, mantenimiento o cierre temporal. La disponibilidad se comunica mediante procedimientos operacionales y avisos aeronáuticos cuando aplica."
+  },
+  {
+    "id": "calles-de-rodaje",
+    "numero": 2,
+    "nombreTecnico": "Calles de rodaje",
+    "nombreIngles": "Taxiways",
+    "categoria": "Infraestructura aeroportuaria",
+    "subcategoria": "Circulación en superficie",
+    "descripcion": {
+      "queEs": "Vías definidas en un aeródromo destinadas al rodaje de aeronaves y a conectar pistas con plataformas, hangares y otras instalaciones.",
+      "paraQueSirve": "Conducir aeronaves entre pista, plataforma y otras áreas autorizadas sin usar la pista para desplazamientos innecesarios. Algunas calles sirven como acceso, salida rápida o conexión entre calles.",
+      "general": "Su trazado y geometría deben reducir conflictos y facilitar un flujo predecible."
+    },
+    "ubicacion": {
+      "zonaFisica": "Entre pistas y plataformas, hangares u otras instalaciones del lado aire. Incluye calles de acceso a puestos y calles de salida de pista.",
+      "lado": "aire",
+      "ladoDetalle": "Lado aire."
+    },
+    "responsable": {
+      "quienLoPresta": "El explotador aeroportuario mantiene pavimentos, marcas y luces. El servicio de tránsito aéreo emite autorizaciones e instrucciones de rodaje cuando se proporciona; pilotos y vehículos autorizados cumplen las autorizaciones y reglas locales.",
+      "ejemplos": "Calle de rodaje paralela a la pista; calle de salida rápida; calle de acceso a una posición de estacionamiento."
+    },
+    "equipos": [
+      "Pavimento dimensionado para aeronaves",
+      "Marcas amarillas de eje y borde",
+      "Letreros de ubicación/dirección",
+      "Luces de eje o borde según diseño",
+      "Drenaje",
+      "Barras de parada donde proceda",
+      "Planos y procedimientos de rodaje"
+    ],
+    "normativa": [
+      {
+        "ambito": "OACI",
+        "texto": "Anexo 14, Vol. I; Doc 9157, Manual de diseño de aeródromos."
+      },
+      {
+        "ambito": "FAA (referencia)",
+        "texto": "AC 150/5300-13B y AC 150/5340-1M como referencias complementarias."
+      },
+      {
+        "ambito": "México",
+        "texto": "Disposiciones AFAC y el manual de aeródromo correspondiente."
+      }
+    ],
+    "momentoOperativo": "Durante el rodaje de llegada y salida, remolques y movimientos autorizados de vehículos. Se inspeccionan y mantienen según el programa del aeródromo."
+  },
+  {
+    "id": "plataformas-estacionamiento",
+    "numero": 3,
+    "nombreTecnico": "Plataformas de estacionamiento de aeronaves",
+    "nombreIngles": "Aircraft Aprons / Aprons",
+    "categoria": "Infraestructura aeroportuaria",
+    "subcategoria": "Estacionamiento y servicios en tierra",
+    "descripcion": {
+      "queEs": "Área definida de un aeródromo destinada a alojar aeronaves para embarque y desembarque, carga, descarga, abastecimiento, estacionamiento o mantenimiento menor.",
+      "paraQueSirve": "Permitir que la aeronave permanezca en tierra y reciba servicios de escala, con espacio y separación suficientes para aeronaves, equipos y personal.",
+      "general": "El término plataforma describe un área funcional; no es lo mismo que un puesto individual."
+    },
+    "ubicacion": {
+      "zonaFisica": "Junto a terminales de pasajeros o carga, hangares y zonas de servicios; se conecta con calles de rodaje o calles de acceso a puestos.",
+      "lado": "aire",
+      "ladoDetalle": "Lado aire."
+    },
+    "responsable": {
+      "quienLoPresta": "El explotador aeroportuario administra la infraestructura y las reglas de plataforma. Aerolíneas y proveedores de asistencia en tierra realizan las tareas asignadas conforme a contratos y procedimientos locales.",
+      "ejemplos": "Plataforma comercial frente a la terminal; plataforma remota; plataforma de carga."
+    },
+    "equipos": [
+      "Pavimento de alta resistencia",
+      "Puestos de estacionamiento",
+      "Líneas de seguridad y guía",
+      "Iluminación",
+      "Drenaje",
+      "Hidrantes o puntos de combustible cuando existan",
+      "Pasarelas, GPU, equipos de handling y rutas para vehículos"
+    ],
+    "normativa": [
+      {
+        "ambito": "OACI",
+        "texto": "Anexo 14, Vol. I; Doc 9157."
+      },
+      {
+        "ambito": "FAA (referencia)",
+        "texto": "AC 150/5300-13B como referencia de diseño."
+      },
+      {
+        "ambito": "México",
+        "texto": "Normativa nacional y manual de operaciones del aeródromo aplicables."
+      }
+    ],
+    "momentoOperativo": "En cada escala de aeronave, durante estacionamiento, embarque, desembarque, carga, abastecimiento y salida. También durante inspecciones y cierres por mantenimiento."
+  },
+  {
+    "id": "areas-estacionamiento",
+    "numero": 4,
+    "nombreTecnico": "Áreas de estacionamiento de aeronaves",
+    "nombreIngles": "Aircraft Parking Areas / Aircraft Stands",
+    "categoria": "Infraestructura aeroportuaria",
+    "subcategoria": "Posiciones de estacionamiento",
+    "descripcion": {
+      "queEs": "Zonas delimitadas dentro de una plataforma donde se coloca una aeronave para una operación específica.",
+      "paraQueSirve": "Ordenar el estacionamiento y permitir el acceso seguro a la aeronave, evitando conflictos entre alas, motores, vehículos, pasarelas y aeronaves vecinas.",
+      "general": "Un puesto se diseña o asigna considerando dimensiones, tipo de aeronave, separación, maniobra, equipos y flujo de pasajeros o carga."
+    },
+    "ubicacion": {
+      "zonaFisica": "En plataformas de pasajeros, carga, aviación general o estacionamiento remoto. Puede estar junto a una terminal o en una zona separada.",
+      "lado": "aire",
+      "ladoDetalle": "Lado aire."
+    },
+    "responsable": {
+      "quienLoPresta": "El explotador aeroportuario define la capacidad y las restricciones de cada puesto; operaciones del aeropuerto asigna posiciones en coordinación con aerolíneas, handling y, cuando sea necesario, ATC.",
+      "ejemplos": "Puesto 12 de contacto con pasarela; puesto remoto 24 para embarque mediante autobús; puesto exclusivo para aeronaves de carga."
+    },
+    "equipos": [
+      "Marcas de eje y parada",
+      "Identificación del puesto",
+      "Sistema visual de guía de atraque (VDGS) o señalero",
+      "Pavimento",
+      "Iluminación",
+      "Puntos de energía y servicios",
+      "Barreras y líneas de seguridad"
+    ],
+    "normativa": [
+      {
+        "ambito": "OACI",
+        "texto": "Anexo 14, Vol. I; Doc 9157."
+      },
+      {
+        "ambito": "FAA (referencia)",
+        "texto": "AC 150/5300-13B como referencia técnica."
+      },
+      {
+        "ambito": "México",
+        "texto": "Las distancias y compatibilidades deben verificarse para cada aeródromo y tipo de aeronave conforme a AFAC y al manual de aeródromo."
+      }
+    ],
+    "momentoOperativo": "Se asigna antes de la llegada y puede modificarse por congestión, meteorología, restricciones técnicas o necesidades operativas. Se verifica libre de obstáculos antes de la entrada de la aeronave."
+  }
+]
