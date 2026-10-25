@@ -21,7 +21,7 @@
 <meta name="twitter:title" content="SERVAE · Servicios e Infraestructura Aeroportuaria">
 <meta name="twitter:description" content="Guía didáctica de servicios e infraestructura aeroportuaria. Proyecto académico Cuervos UTVT.">
 <meta name="twitter:image" content="https://zer0-hma.github.io/servae/preview.jpg">
-<link rel="preload" href="servicios.json?v=202610251625" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="servicios.json?v=202610251639" as="fetch" crossorigin="anonymous">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -306,6 +306,8 @@ footer h4{color:#fff;margin:0 0 10px;font-size:15px}
 .lb .lbx{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
 .lb .lbx:hover{background:rgba(255,255,255,.18)}
 @media (prefers-reduced-motion:reduce){.card .thumb.has-img,.card .thumb.has-img img,.figv .zoom img{animation:none}}
+/* SERVAE-LAZYANIM */
+.anim-off *{animation-play-state:paused!important}
 .note{padding:20px 32px;background:var(--cream-2);color:var(--muted);font-size:14px}
 @media (max-width:700px){.overlay{padding:0}.sheet{border-radius:0;min-height:100%}.row{grid-template-columns:1fr;gap:2px}.eq{columns:1}.sec,.note{padding-left:20px;padding-right:20px}.sheet .btext{padding:20px}}
 
@@ -513,7 +515,7 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
 "use strict";
 let DATA;
 try{
-  const r = await fetch("servicios.json?v=202610251625",{cache:"no-cache"});
+  const r = await fetch("servicios.json?v=202610251639",{cache:"no-cache"});
   if(!r.ok) throw new Error("HTTP " + r.status);
   DATA = await r.json();
 }catch(e){
@@ -823,6 +825,825 @@ Object.assign(ILUS,{
   return wrapSvg(o);
 }
 });
+/* SERVAE-ILUS 24-157 */
+const D9=9;
+const mvs=(inner,path,dur,extra="")=>`<g>${inner}<animateMotion dur="${dur}s" repeatCount="indefinite" path="${path}" ${extra}/></g>`;
+const arrive=(inner,path,t=.35,dur=D9,rot="auto")=>`<g>${inner}<animateMotion dur="${dur}s" repeatCount="indefinite" rotate="${rot}" keyPoints="0;1;1" keyTimes="0;${t};1" calcMode="linear" path="${path}"/></g>`;
+const after=(inner,t=.4,dur=D9)=>`<g opacity="0">${inner}<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;${t};${(t+.04).toFixed(2)};.95;1" dur="${dur}s" repeatCount="indefinite"/></g>`;
+const flow=(d,c="#57E89A",w=3,dash="7 6",dur=.6)=>`<path d="${d}" stroke="rgba(0,0,0,.35)" stroke-width="${w+2}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${c}" stroke-width="${w}" fill="none" stroke-dasharray="${dash}" stroke-linecap="round"><animate attributeName="stroke-dashoffset" values="26;0" dur="${dur}s" repeatCount="indefinite"/></path>`;
+const stream=(d,n,dur,shape,rot="")=>Array.from({length:n},(_,i)=>`<g>${shape(i)}<animateMotion dur="${dur}s" begin="${(-i*dur/n).toFixed(2)}s" repeatCount="indefinite" ${rot?`rotate="${rot}"`:""} path="${d}"/></g>`).join("");
+const BAGC=["#C4122F","#2B5D8A","#F2A900","#2BA94E","#8A3F6E","#1A1D21"];
+const bag=c=>`<rect x="-6" y="-4.5" width="12" height="9" rx="2" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><rect x="-2" y="-6" width="4" height="2" rx="1" fill="#333"/>`;
+const box=(c="#C99A4B")=>`<rect x="-6" y="-6" width="12" height="12" rx="1.5" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width=".8"/><path d="M-6,0 H6 M0,-6 V6" stroke="rgba(0,0,0,.25)" stroke-width=".8"/>`;
+const uld=(c="#B8C2CC")=>`<rect x="-11" y="-10" width="22" height="20" rx="2" fill="${c}" stroke="#6C7783"/><path d="M-11,-10 L11,10 M11,-10 L-11,10" stroke="#6C7783" stroke-width=".8"/>`;
+const sack=(c="#2B5D8A")=>`<ellipse rx="7" ry="5" fill="${c}" stroke="rgba(0,0,0,.35)"/><rect x="-2" y="-6" width="4" height="3" fill="#F2C200"/>`;
+const bags=(d,n,dur)=>stream(d,n,dur,i=>bag(BAGC[i%6]));
+const pill=(x,y,t,bg="#1A1D21",fg="#F2C200",sz=10)=>{y=Math.max(54,Math.min(242,y));const w=String(t).length*sz*.64+16;return `<rect x="${(x-w/2).toFixed(1)}" y="${y-sz}" width="${w.toFixed(1)}" height="${sz*1.9}" rx="${sz*.95}" fill="${bg}" opacity=".93"/>${txt(x,y+sz*.36,t,fg,sz)}`};
+const person=(x,y,c="#F2A900")=>`<circle cx="${x}" cy="${y}" r="5.5" fill="${c}" stroke="rgba(0,0,0,.45)"/><circle cx="${x}" cy="${y}" r="2.8" fill="#6B4630"/>`;
+const pp=(i)=>`<circle r="5" fill="${["#FFD166","#FF7A9C","#7AD3FF","#B6F27A","#F4A261"][i%5]}" stroke="rgba(0,0,0,.4)"/><circle r="2.6" fill="#5A3B28"/>`;
+const crowd=(d,n,dur)=>stream(d,n,dur,pp);
+const spinAt=(x,y,inner,dur=1,rev=false)=>`<g transform="translate(${x},${y})"><g>${inner}<animateTransform attributeName="transform" type="rotate" from="${rev?360:0}" to="${rev?0:360}" dur="${dur}s" repeatCount="indefinite"/></g></g>`;
+const bobAt=(x,y,inner,dy=4,dur=2.4)=>`<g transform="translate(${x},${y})"><g>${inner}<animateTransform attributeName="transform" type="translate" values="0,0;0,${-dy};0,0" dur="${dur}s" repeatCount="indefinite"/></g></g>`;
+const ring=(x,y,c="#57E89A",r0=8,r1=40,d=0,dur=2.4)=>`<circle cx="${x}" cy="${y}" r="${r0}" fill="none" stroke="${c}" stroke-width="2.5"><animate attributeName="r" values="${r0};${r1}" dur="${dur}s" begin="${d}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${dur}s" begin="${d}s" repeatCount="indefinite"/></circle>`;
+const fanAt=(x,y,r=16,dur=.6,c="#9AA6B2")=>`<circle cx="${x}" cy="${y}" r="${r+4}" fill="#5A6470" stroke="#3A4552" stroke-width="2"/>`+spinAt(x,y,[0,90,180,270].map(a=>`<path d="M0,0 C${r*.3},${-r*.4} ${r*.9},${-r*.3} ${r},0 C${r*.6},${r*.1} ${r*.3},${r*.1} 0,0Z" fill="${c}" transform="rotate(${a})"/>`).join("")+`<circle r="3" fill="#333"/>`,dur);
+const parts=(x,y,c,n=8,spread=40,dir=-90,dur=1.2,r=3.5)=>Array.from({length:n},(_,i)=>{const a=(dir+(i/(n-1)-.5)*70)*Math.PI/180,dx=Math.cos(a)*spread,dy=Math.sin(a)*spread;return `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"><animate attributeName="cx" values="${x};${(x+dx).toFixed(1)}" dur="${dur}s" begin="${(-i*dur/n).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="cy" values="${y};${(y+dy).toFixed(1)}" dur="${dur}s" begin="${(-i*dur/n).toFixed(2)}s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0" dur="${dur}s" begin="${(-i*dur/n).toFixed(2)}s" repeatCount="indefinite"/></circle>`}).join("");
+const fall=(n,c="#fff",seed=3)=>{const r=rng(seed);return Array.from({length:n},(_,i)=>{const x=(r()*420-10).toFixed(0),d=(4+r()*4).toFixed(1);return `<circle cx="${x}" cy="-10" r="${(1.5+r()*2).toFixed(1)}" fill="${c}" opacity=".9"><animate attributeName="cy" values="-10;310" dur="${d}s" begin="${(-r()*8).toFixed(1)}s" repeatCount="indefinite"/></circle>`}).join("")};
+const parkedP=(x=190,y=150,s=2.5,rot=0,f="#fff")=>`<g transform="translate(${x},${y}) rotate(${rot})">${plane(s,f)}</g>`;
+const veh=(k,c="#2B5D8A")=>{const b=(w,h,col)=>`<rect x="${-w/2+2}" y="${-h/2+3}" width="${w}" height="${h}" rx="3" fill="rgba(0,0,0,.25)"/><rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="3" fill="${col}"/>`;
+  const fl=(x)=>`<circle class="lt" style="animation-duration:.5s" cx="${x}" cy="-4" r="2" fill="#4C7DFF"/><circle class="lt" style="animation-duration:.5s;animation-delay:.25s" cx="${x}" cy="4" r="2" fill="#FF3B3B"/>`;
+  switch(k){
+  case"belt":return b(52,12,"#8A949E")+`<rect x="13" y="-6" width="13" height="12" rx="2" fill="#F2A900"/><line x1="-25" y1="0" x2="12" y2="0" stroke="#1A1D21" stroke-width="5" stroke-dasharray="3 3"><animate attributeName="stroke-dashoffset" values="0;6" dur=".4s" repeatCount="indefinite"/></line>`;
+  case"tank":return b(48,18,c)+`<rect x="13" y="-7" width="10" height="14" rx="2" fill="rgba(255,255,255,.6)"/><line x1="-21" y1="-4" x2="8" y2="-4" stroke="rgba(255,255,255,.35)" stroke-width="2"/><line x1="-21" y1="4" x2="8" y2="4" stroke="rgba(0,0,0,.18)" stroke-width="2"/>`;
+  case"boxt":return b(46,20,"#F4F4F4")+`<rect x="15" y="-8" width="9" height="16" rx="2" fill="${c}"/><rect x="-21" y="-8" width="33" height="16" fill="none" stroke="#B9C4CF"/>`;
+  case"stairs":return b(44,13,c)+Array.from({length:7},(_,i)=>`<line x1="${-18+i*5}" y1="-5" x2="${-18+i*5}" y2="5" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>`).join("")+`<rect x="14" y="-6" width="8" height="12" rx="2" fill="#1A1D21" opacity=".5"/>`;
+  case"tug":return b(20,13,"#F2A900")+`<rect x="3" y="-5" width="5" height="10" rx="1.5" fill="rgba(255,255,255,.55)"/>`;
+  case"bus":return b(62,18,c)+Array.from({length:6},(_,i)=>`<rect x="${-26+i*9}" y="-6" width="6" height="12" rx="1" fill="rgba(255,255,255,.5)"/>`).join("");
+  case"van":return b(28,14,c)+`<rect x="7" y="-5" width="5" height="10" rx="1.5" fill="rgba(255,255,255,.55)"/>`;
+  case"gpu":return b(24,15,"#F2C200")+txt(0,3.5,"GPU","#1A1D21",7);
+  case"amb":return b(34,16,"#F7F7F7")+`<rect x="-17" y="-2" width="34" height="4" fill="#E01E2B"/><path d="M-6,-1 h4 v-4 h3 v4 h4 v3 h-4 v4 h-3 v-4 h-4z" fill="#E01E2B" transform="translate(-4,0) scale(.8)"/>`+fl(10);
+  case"fire":return b(38,17,"#E01E2B")+`<rect x="11" y="-6" width="7" height="12" rx="1.5" fill="#FFE3E3"/><rect x="-14" y="-2" width="20" height="4" fill="#F4F4F4"/>`+fl(6);
+  case"sweep":return b(32,15,"#2BA94E")+spinAt(18,-5,`<circle r="5" fill="#C99A4B" stroke="#7A5A2A" stroke-dasharray="2 2"/>`,.4)+spinAt(18,5,`<circle r="5" fill="#C99A4B" stroke="#7A5A2A" stroke-dasharray="2 2"/>`,.4,true);
+  case"fork":return b(20,14,"#2BA94E")+`<rect x="10" y="-6" width="12" height="3" fill="#333"/><rect x="10" y="3" width="12" height="3" fill="#333"/>`;
+  case"patrol":return b(26,13,c)+`<rect x="5" y="-5" width="5" height="10" rx="1.5" fill="rgba(255,255,255,.55)"/>`+`<circle class="glow" style="animation-duration:.8s" cx="-2" cy="0" r="3" fill="#FF9F1A"/>`;
+  case"cart":return b(22,13,"#FFFFFF")+`<rect x="-9" y="-5" width="10" height="10" rx="2" fill="${c}"/>`;
+  case"scrub":return b(22,16,c)+`<rect x="10" y="-9" width="5" height="18" rx="2" fill="#333"/>`;
+  default:return car(c,24,12);
+  }};
+const floorT=(c="#E9E4DA")=>joints(c);
+const wallTop=(h=56,apron=true)=>`<rect x="-20" y="-20" width="440" height="${h+20}" fill="${apron?"#B9C0C7":"#DCD5CA"}"/><rect x="-20" y="${h-6}" width="440" height="8" fill="#7FB3D5"/>`;
+const counter=(x,y,w=56,c="#8B6B4A")=>`<rect x="${x+2}" y="${y+3}" width="${w}" height="15" rx="3" fill="rgba(0,0,0,.18)"/><rect x="${x}" y="${y}" width="${w}" height="15" rx="3" fill="${c}"/><rect x="${x}" y="${y}" width="${w}" height="5" rx="2" fill="rgba(255,255,255,.25)"/>`+person(x+w/2,y-9,"#2B5D8A");
+const fids=(x,y,w=96,h=56,t="SALIDAS",n=4)=>{let o=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="#0E141A" stroke="#3A4552" stroke-width="2"/>${txt(x+8,y+13,t,"#F2C200",8,"start")}`;const ds=["AM 512","Y4 230","VB 118","AA 902","UA 340","IB 645"],st=["A TIEMPO","ABORDANDO","DEMORADO","A TIEMPO"];for(let i=0;i<n;i++){const yy=y+24+i*((h-28)/n);o+=`<g${i===1?` class="lt" style="animation-duration:1.4s"`:""}>${txt(x+8,yy+3,ds[i],"#fff",7.5,"start")}${txt(x+w-8,yy+3,st[i%4],i===2?"#FF6B6B":"#57E89A",7,"end")}</g>`}return o};
+const seats=(x,y,cols,rows,c="#2B5D8A")=>{let o="";for(let r=0;r<rows;r++)for(let k=0;k<cols;k++)o+=`<rect x="${x+k*13}" y="${y+r*22}" width="11" height="11" rx="2.5" fill="${c}" stroke="rgba(0,0,0,.25)"/>`;return o};
+const belt=(x1,y,x2,w=12)=>`<rect x="${x1}" y="${y-w/2}" width="${x2-x1}" height="${w}" rx="3" fill="#3A3F45"/><line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#5A6068" stroke-width="${w-4}" stroke-dasharray="3 4"><animate attributeName="stroke-dashoffset" values="7;0" dur=".4s" repeatCount="indefinite"/></line>`;
+const fence=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#6C7783" stroke-width="2.5" stroke-dasharray="2 5"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#9AA6B2" stroke-width="1"/>`;
+const camAt=(x,y,a0=20,a1=110,c="#7AD3FF")=>`<g transform="translate(${x},${y})"><g><path d="M0,0 L70,-22 L70,22Z" fill="${c}" opacity=".22"/><rect x="-6" y="-4" width="14" height="8" rx="2" fill="#1A1D21"/><circle cx="7" cy="0" r="2" fill="#FF3B3B" class="glow"/><animateTransform attributeName="transform" type="rotate" values="${a0};${a1};${a0}" dur="5s" repeatCount="indefinite"/></g></g>`;
+const bldg=(x,y,w,h,c="#E9E1D5",label="",lc="#6C7783")=>`<rect x="${x+3}" y="${y+4}" width="${w}" height="${h}" fill="rgba(0,0,0,.2)"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}" stroke="rgba(0,0,0,.18)" stroke-width="2"/>${label?txt(x+w/2,y+h/2+4,label,lc,11):""}`;
+const tankTop=(x,y,r,c="#E8ECEF",lvl=.7)=>`<circle cx="${x+3}" cy="${y+4}" r="${r}" fill="rgba(0,0,0,.22)"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}" stroke="#9AA6B2" stroke-width="2"/><circle cx="${x}" cy="${y}" r="${r*.62}" fill="none" stroke="#B9C4CF" stroke-width="1.5"/><circle cx="${x}" cy="${y}" r="${r*.18}" fill="#9AA6B2"/>`;
+const meter=(x,y,h=40,c="#2B8CFF",a="0.3;0.9;0.3",dur=4)=>`<rect x="${x}" y="${y}" width="10" height="${h}" rx="3" fill="#1A1D21"/><rect x="${x+2}" y="${y+2}" width="6" height="${h-4}" rx="2" fill="${c}" transform="translate(0,0)"><animate attributeName="height" values="${a.split(";").map(v=>((h-4)*v).toFixed(1)).join(";")}" dur="${dur}s" repeatCount="indefinite"/><animate attributeName="y" values="${a.split(";").map(v=>(y+2+(h-4)*(1-v)).toFixed(1)).join(";")}" dur="${dur}s" repeatCount="indefinite"/></rect>`;
+const bolt=(x,y,s=1,c="#F2C200")=>`<path d="M3,-14 L-7,2 L0,2 L-3,14 L8,-3 L1,-3Z" fill="${c}" stroke="#1A1D21" stroke-width="1" transform="translate(${x},${y}) scale(${s})"/>`;
+const dropI=(x,y,s=1,c="#2B8CFF")=>`<path d="M0,-12 C6,-4 9,0 9,4 A9,9 0 0 1 -9,4 C-9,0 -6,-4 0,-12Z" fill="${c}" stroke="rgba(0,0,0,.3)" transform="translate(${x},${y}) scale(${s})"/>`;
+const crossI=(x,y,s=1,c="#E01E2B")=>`<path d="M-4,-12 h8 v8 h8 v8 h-8 v8 h-8 v-8 h-8 v-8 h8z" fill="${c}" transform="translate(${x},${y}) scale(${s})"/>`;
+const flake=(x,y,s=1,c="#BDE7FF")=>`<g transform="translate(${x},${y}) scale(${s})" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><path d="M0,-12 V12 M-10,-6 L10,6 M-10,6 L10,-6"/></g>`;
+const heartLine=(x,y,w=120,c="#57E89A")=>`<path d="M${x},${y} h${w*.3} l8,-16 l8,30 l8,-24 l6,10 h${w*.3}" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="${w*1.4}" stroke-dashoffset="${w*1.4}"><animate attributeName="stroke-dashoffset" values="${w*1.4};0;-${w*1.4}" dur="2.2s" repeatCount="indefinite"/></path>`;
+const cone=(x,y)=>`<path d="M${x},${y-7} L${x+6},${y+5} L${x-6},${y+5}Z" fill="#FF7A1A"/><rect x="${x-3}" y="${y-1}" width="6" height="2" fill="#fff"/>`;
+const barrier=(x,y,len=46,dir=1)=>`<rect x="${x-5}" y="${y-5}" width="10" height="10" rx="2" fill="#C4122F"/><g transform="translate(${x},${y})"><g><rect x="0" y="-2.5" width="${len*dir}" height="5" fill="#fff" stroke="#C4122F" stroke-dasharray="6 6"/><animateTransform attributeName="transform" type="rotate" values="0;0;${-80*dir};${-80*dir};0" keyTimes="0;.25;.35;.65;.75" dur="${D9}s" repeatCount="indefinite"/></g></g>`;
+const apronP=()=>joints("#C3C8CE");
+const scanLine=(x,y,w,h,c="#57E89A")=>`<rect x="${x}" y="${y}" width="${w}" height="3" fill="${c}" opacity=".85"><animate attributeName="y" values="${y};${y+h-3};${y}" dur="2s" repeatCount="indefinite"/></rect>`;
+const stalls=(x,y,n,w=26,h=44,c="#fff")=>Array.from({length:n+1},(_,i)=>`<line x1="${x+i*w}" y1="${y}" x2="${x+i*w}" y2="${y+h}" stroke="${c}" stroke-width="2"/>`).join("");
+const ICON={
+ cup:`<path d="M-14,-6 h24 v10 a12,12 0 0 1 -24,0z" fill="#fff" stroke="#6B4630" stroke-width="2"/><path d="M10,-2 a6,6 0 0 1 0,10" fill="none" stroke="#6B4630" stroke-width="3"/><ellipse cx="-2" cy="-6" rx="12" ry="3" fill="#6B4630"/>`,
+ plate:`<circle r="17" fill="#fff" stroke="#B9C4CF" stroke-width="2"/><circle r="10" fill="#F2A900"/><circle cx="-3" cy="-2" r="4" fill="#C4122F"/><circle cx="4" cy="3" r="3" fill="#2BA94E"/><rect x="-27" y="-14" width="3" height="28" rx="1.5" fill="#9AA6B2"/><rect x="24" y="-14" width="3" height="28" rx="1.5" fill="#9AA6B2"/>`,
+ glass:`<path d="M-12,-16 h24 l-10,16 v12 h7 v3 h-18 v-3 h7 v-12z" fill="#BDE7FF" stroke="#2B5D8A" stroke-width="1.5"/><path d="M-9,-12 h18 l-6,9 h-6z" fill="#E0457B"/>`,
+ bag:`<path d="M-14,-6 h28 l-3,24 h-22z" fill="#2BA94E"/><path d="M-7,-6 v-5 a7,7 0 0 1 14,0 v5" fill="none" stroke="#14532D" stroke-width="2.5"/>`,
+ basket:`<path d="M-16,-4 h32 l-5,20 h-22z" fill="#F2A900"/><path d="M-10,-4 l6,-12 M10,-4 l-6,-12" stroke="#7A5A2A" stroke-width="3"/><path d="M-12,4 h24 M-11,10 h22" stroke="#7A5A2A"/>`,
+ gift:`<rect x="-15" y="-8" width="30" height="24" rx="2" fill="#8A3F6E"/><rect x="-3" y="-8" width="6" height="24" fill="#F2C200"/><rect x="-17" y="-14" width="34" height="8" rx="2" fill="#A44F86"/><path d="M0,-14 c-8,-10 -16,-2 -6,0 M0,-14 c8,-10 16,-2 6,0" fill="none" stroke="#F2C200" stroke-width="2.5"/>`,
+ coin:`<circle r="17" fill="#F2C200" stroke="#9A7C00" stroke-width="2.5"/>${'<text x="0" y="8" font-family="Manrope,Arial" font-weight="800" font-size="22" fill="#7A5A00" text-anchor="middle">$</text>'}`,
+ bank:`<path d="M-20,-8 L0,-20 L20,-8Z" fill="#2B5D8A"/><rect x="-18" y="12" width="36" height="5" fill="#2B5D8A"/>${[-13,-4,5,14].map(x=>`<rect x="${x-2}" y="-6" width="4" height="17" fill="#7FA1BF"/>`).join("")}`,
+ atm:`<rect x="-14" y="-18" width="28" height="36" rx="3" fill="#2B5D8A"/><rect x="-10" y="-14" width="20" height="12" rx="2" fill="#9FD3F2"/><rect x="-8" y="4" width="16" height="3" fill="#1A1D21"/><rect x="-6" y="8" width="12" height="7" fill="#57E89A"><animate attributeName="height" values="0;9;9;0" dur="2.4s" repeatCount="indefinite"/></rect>`,
+ pharm:`<rect x="-18" y="-18" width="36" height="36" rx="8" fill="#2BA94E"/><path d="M-4,-12 h8 v8 h8 v8 h-8 v8 h-8 v-8 h-8 v-8 h8z" fill="#fff"/>`,
+ carI:`<rect x="-20" y="-4" width="40" height="14" rx="4" fill="#C4122F"/><path d="M-12,-4 l5,-9 h14 l5,9z" fill="#E0457B"/><circle cx="-11" cy="11" r="5" fill="#1A1D21"/><circle cx="11" cy="11" r="5" fill="#1A1D21"/>`,
+ key:`<circle cx="-8" cy="0" r="8" fill="none" stroke="#F2C200" stroke-width="4"/><path d="M0,0 h18 v6 M12,0 v5" fill="none" stroke="#F2C200" stroke-width="4"/>`,
+ bed:`<rect x="-20" y="-2" width="40" height="12" rx="2" fill="#7FA1BF"/><rect x="-20" y="-10" width="12" height="8" rx="3" fill="#fff"/><rect x="-22" y="-14" width="4" height="30" fill="#6B4630"/><rect x="18" y="0" width="4" height="16" fill="#6B4630"/>`,
+ globe:`<circle r="17" fill="#2B8CFF"/><path d="M-10,-10 c6,2 6,8 0,10 c-4,2 -2,8 4,8 M6,-14 c-4,4 2,8 8,6 M2,6 c4,0 8,4 6,8" fill="#2BA94E" stroke="#2BA94E" stroke-width="3"/><ellipse rx="17" ry="7" fill="none" stroke="rgba(255,255,255,.4)"/>`,
+ screen:`<rect x="-22" y="-15" width="44" height="28" rx="3" fill="#1A1D21"/><rect x="-19" y="-12" width="38" height="22" fill="#E0457B"><animate attributeName="fill" values="#E0457B;#2BA94E;#F2A900;#2B8CFF;#E0457B" dur="4s" repeatCount="indefinite"/></rect><rect x="-3" y="13" width="6" height="6" fill="#555"/>`,
+ vase:`<path d="M-8,-16 h16 v4 c10,6 12,18 4,28 h-24 c-8,-10 -6,-22 4,-28z" fill="#C2410C"/><path d="M-12,2 h24 M-13,8 h26" stroke="#F2C200" stroke-width="2.5"/><path d="M-10,-4 l4,4 l4,-4 l4,4 l4,-4" fill="none" stroke="#2BA94E" stroke-width="2"/>`,
+ burger:`<path d="M-17,-2 a17,13 0 0 1 34,0z" fill="#E3A34B"/><rect x="-18" y="0" width="36" height="5" rx="2" fill="#2BA94E"/><rect x="-17" y="5" width="34" height="6" rx="2" fill="#6B3A1E"/><path d="M-17,11 h34 a3,6 0 0 1 -3,6 h-28 a3,6 0 0 1 -3,-6z" fill="#E3A34B"/>`,
+ vend:`<rect x="-15" y="-20" width="30" height="40" rx="3" fill="#C4122F"/><rect x="-11" y="-16" width="16" height="26" fill="#BDE7FF"/>${[0,1,2].map(r=>`<rect x="-9" y="${-14+r*8}" width="5" height="5" fill="#F2A900"/><rect x="-2" y="${-14+r*8}" width="5" height="5" fill="#2BA94E"/>`).join("")}<rect x="8" y="-14" width="4" height="10" fill="#1A1D21"/>`,
+ wifi:`${[18,12,6].map((r,i)=>`<path d="M${-r},${-r*.2} a${r*1.15},${r*1.15} 0 0 1 ${2*r},0" fill="none" stroke="#2B8CFF" stroke-width="3.5" stroke-linecap="round" class="lt" style="animation-delay:${(2-i)*.25}s;animation-duration:1.2s"/>`).join("")}<circle cy="6" r="3.5" fill="#2B8CFF"/>`,
+ brief:`<rect x="-18" y="-8" width="36" height="24" rx="3" fill="#6B4630"/><rect x="-7" y="-14" width="14" height="6" rx="2" fill="none" stroke="#6B4630" stroke-width="3"/><rect x="-18" y="0" width="36" height="3" fill="#4A2F1F"/>`,
+ tools:`<path d="M-14,14 L6,-6" stroke="#9AA6B2" stroke-width="6" stroke-linecap="round"/><circle cx="9" cy="-9" r="7" fill="none" stroke="#9AA6B2" stroke-width="5"/><path d="M-14,-14 L14,14" stroke="#F2A900" stroke-width="5" stroke-linecap="round"/>`,
+ mop:`<rect x="-2" y="-22" width="4" height="30" fill="#8B6B4A"/><path d="M-12,8 h24 l-4,12 h-16z" fill="#7AD3FF"/>`,
+ wc:`<circle cx="-9" cy="-12" r="4" fill="#2B5D8A"/><path d="M-14,-6 h10 v14 h-10z" fill="#2B5D8A"/><circle cx="9" cy="-12" r="4" fill="#E0457B"/><path d="M4,-6 h10 l3,14 h-16z" fill="#E0457B"/><rect x="-1" y="-16" width="2" height="30" fill="#9AA6B2"/>`,
+ info:`<circle r="17" fill="#2B8CFF"/><circle cy="-8" r="3" fill="#fff"/><rect x="-3" y="-2" width="6" height="14" rx="2" fill="#fff"/>`,
+ doc:`<path d="M-13,-17 h18 l8,8 v26 h-26z" fill="#fff" stroke="#9AA6B2" stroke-width="1.5"/><path d="M-8,-6 h16 M-8,0 h16 M-8,6 h10" stroke="#9AA6B2" stroke-width="2"/>`,
+ mail:`<rect x="-18" y="-12" width="36" height="24" rx="2" fill="#fff" stroke="#2B5D8A" stroke-width="2"/><path d="M-18,-12 L0,2 L18,-12" fill="none" stroke="#2B5D8A" stroke-width="2"/>`,
+ shield:`<path d="M0,-18 L15,-12 V0 C15,10 8,16 0,19 C-8,16 -15,10 -15,0 V-12Z" fill="#2B5D8A"/><path d="M-6,0 l4,5 l9,-10" fill="none" stroke="#57E89A" stroke-width="3"/>`,
+ recycle:`<g fill="none" stroke="#2BA94E" stroke-width="4" stroke-linecap="round"><path d="M-6,-14 L4,-14 L12,0"/><path d="M14,6 L8,16 L-8,16"/><path d="M-14,8 L-18,-2 L-10,-14"/></g>`,
+ heart:`<path d="M0,16 C-22,2 -16,-16 0,-8 C16,-16 22,2 0,16Z" fill="#E01E2B"/>`,
+ wheel:`<circle cx="2" cy="6" r="11" fill="none" stroke="#2B8CFF" stroke-width="3.5"/><circle cx="-3" cy="-15" r="3.5" fill="#2B8CFF"/><path d="M-3,-10 v12 h12 l5,10" fill="none" stroke="#2B8CFF" stroke-width="3.5" stroke-linecap="round"/>`
+};
+const icon=(k,x,y,s=1)=>`<g transform="translate(${x},${y}) scale(${s})">${ICON[k]}</g>`;
+const mall=(ic,label,acc="#2BA94E",extra="")=>{let o=floorT("#E7E1D6");
+  o+=`<rect x="-20" y="-20" width="440" height="160" fill="#D9D2C6"/>`;
+  [[10,"#7FA1BF"],[300,"#C99A4B"]].forEach(([x,c])=>o+=`<rect x="${x}" y="50" width="90" height="86" fill="#F4F0EA" stroke="#B9B0A2" stroke-width="2"/><rect x="${x}" y="126" width="90" height="10" fill="${c}"/>`);
+  o+=`<rect x="114" y="36" width="172" height="104" fill="#FBF8F3" stroke="${acc}" stroke-width="3"/><rect x="114" y="126" width="172" height="14" fill="${acc}"/>`;
+  for(let i=0;i<9;i++)o+=`<path d="M${114+i*19.1},140 h19.1 l-3,9 h-13z" fill="${i%2?acc:"#fff"}"/>`;
+  o+=`<rect x="130" y="42" width="140" height="18" rx="9" fill="${acc}"/>${txt(200,55,label,"#fff",10)}`;
+  o+=bobAt(200,96,`<circle r="32" fill="${acc}" opacity=".14"/><g transform="scale(1.3)">${ICON[ic]}</g>`,4,2.2)+ring(200,96,acc,30,48,0,2.4);
+  o+=extra;
+  o+=crowd("M-20,200 L420,200",5,14)+crowd("M420,236 L-20,236",4,16);
+  o+=crowd("M200,250 L200,150 L200,250",2,8);
+  return o};
+const room=(c="#E9E4DA")=>floorT(c)+`<rect x="-20" y="-20" width="440" height="58" fill="#C9C1B4"/><rect x="-20" y="34" width="440" height="6" fill="#A79F92"/>`;
+const W=s=>wrapSvg(s);
+Object.assign(ILUS,{
+24(){ // salas de última espera
+  let o=floorT("#E7E1D6")+wallTop(70);
+  o+=parkedP(120,24,1.8,0)+`<rect x="-20" y="64" width="440" height="8" fill="#7FB3D5"/>`;
+  o+=seats(30,110,8,3)+seats(250,110,8,3,"#2BA94E");
+  [[43,99],[82,121],[263,99],[315,143],[56,143]].forEach(([x,y],i)=>o+=person(x,y,["#FFD166","#FF7A9C","#7AD3FF","#B6F27A","#F4A261"][i]));
+  o+=fids(150,90,100,60,"SALA 12");
+  o+=crowd("M-20,210 L330,210 L330,80",5,12)+pill(200,232,"ÚLTIMA ESPERA");
+  return W(o)},
+25(){ // inspección de pasajeros
+  let o=floorT("#E2DDD3")+room();
+  o+=belt(40,150,170,16)+`<rect x="80" y="134" width="44" height="32" rx="3" fill="#5A6470"/>`+stream("M40,150 L170,150",3,4,()=>`<rect x="-9" y="-6" width="18" height="12" rx="3" fill="#9AA6B2" stroke="#6C7783"/>`);
+  o+=`<rect x="226" y="118" width="48" height="64" rx="6" fill="#E9EEF2" stroke="#5A6470" stroke-width="9"/><rect x="226" y="118" width="48" height="64" rx="6" fill="none" stroke="#57E89A" stroke-width="3" class="glow" style="animation-duration:1s"/>${txt(250,112,"ARCO","#1A1D21",9)}`;
+  o+=crowd("M250,300 L250,200 L250,100 L330,60",4,7)+person(300,150,"#2B5D8A")+person(200,190,"#2B5D8A");
+  o+=pill(250,232,"FILTRO DE SEGURIDAD","#C4122F","#fff");
+  return W(o)},
+26(){ // áreas de inspección de equipaje
+  let o=floorT("#D9DDE1");
+  o+=belt(-20,150,420,22)+`<rect x="150" y="116" width="100" height="68" rx="6" fill="#2B3A4A"/><rect x="160" y="126" width="80" height="48" rx="3" fill="#0E141A"/>`+scanLine(160,126,80,48);
+  o+=stream("M-20,150 L420,150",5,8,i=>i===2?`<g>${bag("#C4122F")}<rect x="-9" y="-8" width="18" height="16" rx="3" fill="none" stroke="#FF3B3B" stroke-width="2" class="glow" style="animation-duration:.6s"/></g>`:bag(BAGC[(i+1)%6]));
+  o+=fids(270,60,110,44,"RAYOS X",2)+person(140,212,"#2B5D8A")+person(262,212,"#2B5D8A");
+  o+=pill(110,92,"BHS · INSPECCIÓN","#1A1D21","#57E89A");
+  return W(o)},
+27(){ // vialidades de acceso a pasajeros
+  let o=grass()+trees(61,20,(x,y)=>y>70&&y<250);
+  o+=`<rect x="-20" y="40" width="440" height="40" fill="#E9E1D5"/>${txt(200,66,"TERMINAL","#6C7783",13)}`;
+  o+=`<path d="M-30,250 C120,250 140,110 260,110 L440,110" stroke="#4A5057" stroke-width="44" fill="none"/><path d="M-30,250 C120,250 140,110 260,110 L440,110" stroke="#fff" stroke-width="2" stroke-dasharray="14 12" fill="none"/>`;
+  o+=`<rect x="-20" y="84" width="440" height="10" fill="#B9B0A2"/>`;
+  ["#C4122F","#F2F2F2","#2B5D8A","#F2A900"].forEach((c,i)=>o+=mv(car(c),"M-40,260 C120,260 140,120 260,120 L440,120",8,`begin="${-i*2}s"`));
+  o+=pill(318,150,"SALIDAS →","#2B5D8A","#fff")+pill(318,180,"LLEGADAS →","#2BA94E","#fff");
+  return W(o)},
+28(){ // instalaciones para pasajeros
+  let o=floorT("#E7E1D6");
+  const z=[[20,60,"CHECK-IN","#2B5D8A"],[150,60,"SEGURIDAD","#C4122F"],[280,60,"SALAS","#2BA94E"],[20,170,"SANITARIOS","#8A3F6E"],[150,170,"RECLAMO","#F2A900"],[280,170,"COMERCIOS","#2E8A7A"]];
+  z.forEach(([x,y,t,c])=>o+=`<rect x="${x}" y="${y}" width="104" height="70" rx="8" fill="${c}" opacity=".16" stroke="${c}" stroke-width="2"/>`+txt(x+52,y+40,t,c,10));
+  o+=flow("M72,130 L72,150 L202,150 L202,130 M202,95 L332,95","#1A1D21",2,"5 5",.8)+crowd("M72,95 L202,95 L332,95 L332,205 L202,205 L72,205",6,14);
+  return W(o)},
+29(){ // instalaciones para carga
+  let o=apronP()+bldg(-20,30,250,90,"#8A97A4","");
+  o+=txt(105,64,"TERMINAL DE CARGA","#fff",13);[20,70,120,170].forEach(x=>o+=`<rect x="${x}" y="114" width="32" height="8" fill="#F2C200"/>`);
+  o+=parkedP(320,200,2.6,-90,"#F4F6F8");
+  o+=mv(`${veh("tug")}${[1,2].map(k=>`<g transform="translate(${-6-k*26},0)">${uld()}</g>`).join("")}`,"M40,140 L40,230 L250,230 L250,150 L120,150 L40,140",10);
+  o+=mv(veh("fork"),"M150,180 L220,180 L220,140 L150,140Z",6);
+  return W(o)},
+30(){ // documentación / check-in
+  let o=floorT("#E7E1D6")+room();
+  [30,120,210,300].forEach((x,i)=>o+=counter(x,104,66)+`<rect x="${x+8}" y="66" width="50" height="16" rx="3" fill="#0E141A"/>`+txt(x+33,78,"MOSTR. "+(i+1),"#F2C200",8));
+  o+=belt(-20,84,420,8)+bags("M-20,84 L420,84",5,7);
+  [63,153,243,333].forEach((x,i)=>o+=crowd(`M${x},300 L${x},140`,3,6+i*.6));
+  o+=pill(200,250,"DOCUMENTACIÓN","#2B5D8A","#fff");
+  return W(o)},
+31(){ // reclamo de equipaje
+  let o=floorT("#E2DDD3");
+  o+=`<rect x="80" y="96" width="240" height="96" rx="48" fill="#3A3F45"/><rect x="104" y="120" width="192" height="48" rx="24" fill="#C9C1B4"/>`;
+  const P="M128,108 L272,108 A36,36 0 0 1 272,180 L128,180 A36,36 0 0 1 128,108Z";
+  o+=`<path d="${P}" stroke="#5A6068" stroke-width="16" fill="none" stroke-dasharray="3 4"><animate attributeName="stroke-dashoffset" values="7;0" dur=".4s" repeatCount="indefinite"/></path>`+bags(P,8,10);
+  o+=fids(150,40,100,48,"BANDA 3",2)+[[60,140],[70,206],[340,140],[330,206],[200,226]].map(([x,y],i)=>person(x,y,["#FFD166","#FF7A9C","#7AD3FF","#B6F27A","#F4A261"][i])).join("");
+  return W(o)},
+33(){ // migración
+  let o=floorT("#E2DDD3")+room();
+  [50,150,250,350].forEach((x,i)=>o+=`<rect x="${x-26}" y="86" width="52" height="40" rx="4" fill="#2B5D8A"/><rect x="${x-20}" y="92" width="40" height="10" fill="#9FD3F2"/>`+person(x,112,"#14532D")+`<circle class="lt" style="animation-delay:${i*.4}s" cx="${x+18}" cy="120" r="3.5" fill="#57E89A"/>`+crowd(`M${x},300 L${x},140 L${x},40`,3,7+i*.5));
+  o+=pill(200,60,"CONTROL MIGRATORIO · INM","#14532D","#fff");
+  return W(o)},
+34(){ // aduana
+  let o=floorT("#E2DDD3")+room();
+  o+=`<rect x="70" y="120" width="120" height="30" rx="4" fill="#8B6B4A"/><rect x="210" y="120" width="120" height="30" rx="4" fill="#8B6B4A"/>`;
+  o+=`<g transform="translate(130,135)">${bag("#C4122F")}</g>`;
+  o+=`<rect x="20" y="70" width="60" height="30" rx="5" fill="#2BA94E"/>${txt(50,90,"NADA","#fff",9)}<rect x="320" y="70" width="60" height="30" rx="5" fill="#C4122F"/>${txt(350,90,"DECLARAR","#fff",9)}`;
+  o+=`<circle cx="200" cy="80" r="12" fill="#1A1D21"/><circle cx="200" cy="80" r="6" fill="#57E89A"><animate attributeName="fill" values="#57E89A;#57E89A;#FF3B3B;#57E89A" keyTimes="0;.6;.75;1" dur="4s" repeatCount="indefinite"/></circle>${txt(200,108,"SEMÁFORO FISCAL","#1A1D21",8)}`;
+  o+=crowd("M50,300 L50,110 L50,40",3,7)+crowd("M350,300 L350,110",2,8)+person(130,170,"#2B5D8A")+person(270,170,"#2B5D8A");
+  return W(o)},
+35(){ // ascenso y descenso
+  let o=floorT("#D6D0C6");
+  o+=`<rect x="-20" y="30" width="440" height="80" fill="#E9E1D5"/>${[60,200,340].map(x=>`<rect x="${x-24}" y="96" width="48" height="14" fill="#7FB3D5"/>`).join("")}`;
+  o+=`<rect x="-20" y="150" width="440" height="110" fill="#4A5057"/><line x1="-20" y1="205" x2="420" y2="205" stroke="#fff" stroke-dasharray="16 12" stroke-width="2"/><rect x="-20" y="150" width="440" height="6" fill="#F2C200"/>`;
+  o+=`<g>${car("#C4122F")}<animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;.5;.5;1" keyTimes="0;.3;.6;1" calcMode="linear" path="M-40,170 L440,170"/></g>`;
+  o+=`<g>${car("#2B5D8A",26,13)}<animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite" keyPoints="0;.35;.35;1" keyTimes="0;.3;.62;1" calcMode="linear" path="M-40,170 L440,170"/></g>`;
+  o+=crowd("M200,150 L200,104",2,3)+crowd("M60,104 L60,150",2,3.4)+mv(veh("bus","#2BA94E"),"M440,232 L-60,232",10);
+  return W(o)},
+36(){ // accesos al aeropuerto
+  let o=grass()+trees(71,26,(x,y)=>y>90&&y<220);
+  o+=`<rect x="-20" y="96" width="440" height="116" fill="#4A5057"/>${[124,154,184].map(y=>`<line x1="-20" y1="${y}" x2="420" y2="${y}" stroke="#fff" stroke-dasharray="16 12" stroke-width="2"/>`).join("")}`;
+  o+=`<rect x="236" y="88" width="24" height="132" fill="#9AA6B2"/>`;
+  [110,140,170,200].forEach((y,i)=>o+=barrier(248,y,30,-1)+mv(car(BAGC[i%6]),`M-40,${y} L460,${y}`,9,`begin="${-i*1.8}s"`));
+  o+=`<rect x="300" y="40" width="96" height="40" rx="4" fill="#14532D"/>${txt(348,57,"AEROPUERTO","#fff",9)}${txt(348,72,"ACCESO →","#F2C200",9)}`;
+  return W(o)},
+37(){ // estacionamiento
+  let o=joints("#5C636B");
+  o+=`<rect x="-20" y="-20" width="440" height="340" fill="#565D65"/>`+stalls(20,50,14)+stalls(20,206,14);
+  const pk=[[33,"#C4122F"],[85,"#F2F2F2"],[137,"#2B5D8A"],[241,"#F2A900"],[293,"#2BA94E"]];pk.forEach(([x,c])=>o+=`<g transform="translate(${x},72) rotate(90)">${car(c)}</g>`);
+  [59,111,215,319,345].forEach((x,i)=>o+=`<g transform="translate(${x},228) rotate(-90)">${car(BAGC[(i+2)%6])}</g>`);
+  o+=`<g>${car("#8A3F6E")}<animateMotion dur="9s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;.55;1" calcMode="linear" path="M-40,150 L180,150 Q189,150 189,120 L189,78"/></g>`;
+  o+=`<rect x="352" y="120" width="40" height="40" rx="6" fill="#2B5D8A"/>${txt(372,148,"P","#fff",26)}`;
+  return W(o)},
+38(){ // salas de espera
+  let o=floorT("#E7E1D6")+wallTop(60,false);
+  o+=seats(20,90,10,4)+seats(250,90,10,4,"#7FA1BF");
+  [[46,101],[85,145],[124,167],[276,123],[328,101],[367,145]].forEach(([x,y],i)=>o+=person(x,y,["#FFD166","#FF7A9C","#7AD3FF","#B6F27A","#F4A261","#FFD166"][i]));
+  o+=fids(150,40,96,46,"SALIDAS",3)+crowd("M-20,200 L420,200",4,12)+crowd("M420,232 L-20,232",3,14);
+  return W(o)},
+39(){ // áreas de embarque
+  let o=floorT("#E7E1D6")+`<rect x="-20" y="-20" width="440" height="80" fill="#B9C0C7"/>`+parkedP(300,30,2.2,180)+`<rect x="-20" y="56" width="440" height="8" fill="#7FB3D5"/>`;
+  o+=`<rect x="236" y="20" width="22" height="70" fill="#B9B0A2"/>`+counter(150,120,70)+pill(185,104,"PUERTA A12","#1A1D21","#F2C200");
+  o+=crowd("M20,250 L20,170 L185,170 L247,170 L247,80 L247,30",7,12);
+  o+=seats(40,200,8,2,"#2B5D8A");
+  return W(o)},
+40(){ // desembarque
+  let o=floorT("#E7E1D6")+`<rect x="-20" y="-20" width="440" height="80" fill="#B9C0C7"/>`+parkedP(110,30,2.2,0)+`<rect x="-20" y="56" width="440" height="8" fill="#7FB3D5"/>`;
+  o+=`<rect x="140" y="20" width="22" height="70" fill="#B9B0A2"/>`;
+  o+=crowd("M151,20 L151,140 L400,140 L400,300",7,10);
+  o+=pill(280,110,"LLEGADAS →","#2BA94E","#fff")+pill(280,200,"→ MIGRACIÓN · RECLAMO","#1A1D21","#F2C200",9);
+  return W(o)},
+41(){ // áreas para transporte terrestre
+  let o=floorT("#D6D0C6")+`<rect x="-20" y="30" width="440" height="50" fill="#E9E1D5"/>`;
+  o+=`<rect x="-20" y="100" width="440" height="150" fill="#4A5057"/>`;
+  [30,130,230,330].forEach((x,i)=>o+=`<path d="M${x},100 l18,40 h50 l18,-40" fill="#5A6068" stroke="#F2C200" stroke-width="2"/>`+txt(x+43,94,"BAHÍA "+(i+1),"#6C7783",8));
+  o+=`<g transform="translate(73,124) rotate(-90)">${veh("bus","#2B5D8A")}</g>`;
+  o+=`<g>${veh("bus","#2BA94E")}<animateMotion dur="10s" repeatCount="indefinite" rotate="auto" keyPoints="0;.5;.5;1" keyTimes="0;.3;.6;1" calcMode="linear" path="M440,200 L270,200 Q273,130 273,124 Q273,130 270,200 L-60,200"/></g>`;
+  o+=crowd("M-20,90 L420,90",4,12)+mv(car("#F2C200",26,13),"M-40,232 L440,232",6);
+  return W(o)},
+42(){ // puertas de embarque
+  let o=floorT("#E7E1D6")+`<rect x="-20" y="-20" width="440" height="70" fill="#B9C0C7"/>`+parkedP(200,22,2.2,180)+`<rect x="-20" y="46" width="440" height="8" fill="#7FB3D5"/>`;
+  o+=`<rect x="80" y="110" width="240" height="20" fill="#8B6B4A"/>`;
+  [120,200,280].forEach((x,i)=>o+=`<rect x="${x-24}" y="104" width="10" height="32" fill="#9AA6B2"/><rect x="${x+14}" y="104" width="10" height="32" fill="#9AA6B2"/><rect x="${x-14}" y="114" width="14" height="12" fill="#57E89A" opacity=".8"><animate attributeName="width" values="14;2;2;14" keyTimes="0;.2;.6;1" dur="3s" begin="${i*.7}s" repeatCount="indefinite"/></rect><rect x="${x}" y="114" width="14" height="12" fill="#57E89A" opacity=".8"><animate attributeName="x" values="${x};${x+12};${x+12};${x}" keyTimes="0;.2;.6;1" dur="3s" begin="${i*.7}s" repeatCount="indefinite"/><animate attributeName="width" values="14;2;2;14" keyTimes="0;.2;.6;1" dur="3s" begin="${i*.7}s" repeatCount="indefinite"/></rect>`+crowd(`M${x},300 L${x},120 L200,60`,3,6+i*.4));
+  o+=`<rect x="20" y="70" width="70" height="34" rx="5" fill="#0E141A"/>${txt(55,93,"A12","#F2C200",18)}`;
+  return W(o)},
+43(){ // arrastre de aeronaves
+  let o=apronP()+`<path d="M200,330 L200,190 Q200,120 120,120 L-40,120" stroke="#F2C200" stroke-width="3" fill="none"/>`;
+  o+=`<g><g>${plane(2.4)}<g transform="translate(64,0)">${veh("tug")}</g><line x1="20" y1="0" x2="54" y2="0" stroke="#333" stroke-width="2.5"/></g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto-reverse" keyPoints="0;1;1" keyTimes="0;.75;1" calcMode="linear" path="M200,200 Q200,120 120,120 L-20,120"/></g>`;
+  o+=person(300,230,"#F2A900")+pill(310,260,"PUSHBACK","#1A1D21","#F2C200");
+  return W(o)},
+44(){ // servicio de rampa
+  let o=apronP()+parkedP();
+  o+=arrive(veh("belt"),"M215,330 L215,196",.3)+arrive(veh("gpu"),"M330,330 L262,150",.35)+arrive(veh("boxt","#C4122F"),"M120,-40 L222,108",.4);
+  o+=mv(`${veh("tug")}${[1,2,3].map(k=>`<g transform="translate(${-6-k*20},0)"><rect x="-8" y="-6" width="16" height="12" rx="2" fill="#2B5D8A"/></g>`).join("")}`,"M-60,250 L460,250",9);
+  o+=person(150,200)+person(260,190)+cone(240,120)+cone(150,206);
+  return W(o)},
+47(){ // carga de equipaje
+  let o=apronP()+parkedP();
+  o+=arrive(veh("belt"),"M240,330 L215,205",.3);
+  o+=after(bags("M215,235 L215,166",4,2.2),.36);
+  o+=arrive(`${veh("tug")}${[1,2].map(k=>`<g transform="translate(${-8-k*22},0)"><rect x="-9" y="-7" width="18" height="14" rx="2" fill="#2B5D8A"/></g>`).join("")}`,"M-60,240 L180,240",.3);
+  o+=person(240,220)+pill(310,250,"CARGA ↑","#1A1D21","#57E89A");
+  return W(o)},
+48(){ // descarga de equipaje
+  let o=apronP()+parkedP();
+  o+=arrive(veh("belt"),"M240,330 L215,205",.3);
+  o+=after(bags("M215,166 L215,235 L120,240",4,2.6),.36);
+  o+=`<g transform="translate(120,240)">${veh("tug")}</g>`+[1,2].map(k=>`<rect x="${120-8-k*22-9}" y="233" width="18" height="14" rx="2" fill="#2B5D8A"/>`).join("");
+  o+=person(240,220)+pill(310,250,"DESCARGA ↓","#1A1D21","#F2C200");
+  return W(o)},
+49(){ // carga de mercancías
+  let o=apronP()+parkedP(190,140,2.7,0,"#F4F6F8");
+  o+=`<rect x="196" y="166" width="40" height="44" rx="3" fill="#F2A900"><animate attributeName="height" values="44;44;30;44" dur="4s" repeatCount="indefinite"/></rect>`;
+  o+=stream("M60,260 L216,260 L216,186",3,6,()=>uld());
+  o+=mv(veh("tug"),"M-60,276 L460,276",10)+pill(100,232,"ULD → BODEGA","#1A1D21","#57E89A");
+  return W(o)},
+50(){ // descarga de mercancías
+  let o=apronP()+parkedP(190,140,2.7,0,"#F4F6F8");
+  o+=`<rect x="196" y="166" width="40" height="44" rx="3" fill="#F2A900"><animate attributeName="height" values="30;44;44;30" dur="4s" repeatCount="indefinite"/></rect>`;
+  o+=stream("M216,186 L216,260 L60,260",3,6,()=>uld("#D6DEE6"));
+  o+=bldg(-20,200,60,60,"#8A97A4","")+pill(110,232,"BODEGA → ALMACÉN","#1A1D21","#F2C200");
+  return W(o)},
+51(){ // correo
+  let o=apronP()+parkedP();
+  o+=arrive(veh("belt"),"M240,330 L215,205",.3)+after(stream("M120,240 L215,235 L215,166",4,2.6,()=>sack()),.36);
+  o+=arrive(veh("van","#F2C200"),"M-60,240 L120,240",.3)+pill(110,212,"CORREO","#2B5D8A","#F2C200");
+  return W(o)},
+52(){ // embarque de pasajeros
+  let o=apronP()+parkedP(200,120,2.6);
+  o+=`<path d="M240,104 L300,40 L420,40" stroke="#B9B0A2" stroke-width="18" fill="none"/>`;
+  o+=crowd("M420,40 L300,40 L240,104",4,6);
+  o+=arrive(veh("stairs","#9AA6B2"),"M140,330 L140,184",.3)+after(crowd("M60,260 L140,260 L140,170 L140,140",4,5),.36);
+  o+=mv(veh("bus","#2B5D8A"),"M-80,262 L60,262",9,'keyPoints="0;1;1" keyTimes="0;.3;1" calcMode="linear"')+pill(320,200,"EMBARQUE","#2BA94E","#fff");
+  return W(o)},
+53(){ // desembarque de pasajeros
+  let o=apronP()+parkedP(200,120,2.6);
+  o+=`<g transform="translate(232,170) rotate(-90)">${veh("stairs","#9AA6B2")}</g>`;
+  o+=crowd("M232,140 L232,196 L232,236 L330,236",5,6);
+  o+=`<g transform="translate(350,250)">${veh("bus","#2B5D8A")}</g>`+pill(90,232,"DESEMBARQUE","#2B5D8A","#fff");
+  return W(o)},
+54(){ // señaleros
+  let o=apronP()+`<line x1="200" y1="330" x2="200" y2="96" stroke="#F2C200" stroke-width="3"/>`;
+  o+=`<g>${plane(2.6)}<animateMotion dur="8s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;.7;1" calcMode="linear" path="M200,400 L200,170"/></g>`;
+  o+=`<g transform="translate(200,74)">${person(0,0,"#F2A900")}${[-1,1].map(s=>`<g><rect x="${s>0?4:-24}" y="-2" width="20" height="4" rx="2" fill="#FF7A1A"/><animateTransform attributeName="transform" type="rotate" values="${s*-30};${s*40};${s*-30}" dur="1s" repeatCount="indefinite"/></g>`).join("")}</g>`;
+  o+=pill(300,74,"SEÑALERO","#1A1D21","#FF7A1A");
+  return W(o)},
+55(){ // aleros
+  let o=apronP()+`<path d="M200,330 L200,40" stroke="#F2C200" stroke-width="2.5" fill="none"/>`;
+  o+=`<g><g>${plane(2.6)}<g transform="translate(70,0)">${veh("tug")}</g><line x1="20" y1="0" x2="60" y2="0" stroke="#333" stroke-width="2.5"/>${person(-14,-66,"#F2A900")}${person(-14,66,"#F2A900")}</g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto" path="M200,380 L200,-120"/></g>`;
+  o+=cone(130,90)+cone(270,210)+pill(330,250,"ALEROS","#1A1D21","#F2A900");
+  return W(o)},
+56(){ // energía eléctrica GPU
+  let o=apronP()+parkedP();
+  o+=arrive(veh("gpu"),"M330,330 L280,190",.3)+after(flow("M276,180 Q260,160 238,150","#F2C200",3,"6 5",.4),.34);
+  o+=after(bobAt(320,110,`<circle r="18" fill="#F2C200" opacity=".25"/>${bolt(0,0,1)}`,3,1.4),.34)+pill(90,232,"400 Hz · GPU","#1A1D21","#F2C200");
+  return W(o)},
+57(){ // aire acondicionado
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#7FB3D5"),"M330,330 L260,206",.3)+after(flow("M248,200 Q222,186 200,160","#7AD3FF",5,"8 6",.5),.34);
+  o+=after(bobAt(320,110,`<circle r="18" fill="#7AD3FF" opacity=".25"/>${flake(0,0,1)}`,3,1.6),.34)+pill(90,232,"AIRE ACONDICIONADO","#1A1D21","#7AD3FF",9);
+  return W(o)},
+58(){ // PCA
+  let o=apronP()+parkedP(200,170,2.4);
+  o+=`<path d="M234,150 L290,70 L430,70" stroke="#B9B0A2" stroke-width="18" fill="none"/><rect x="300" y="78" width="46" height="22" rx="3" fill="#7FB3D5"/>${txt(323,93,"PCA","#0E141A",9)}`;
+  o+=flow("M310,100 Q260,140 210,170","#7AD3FF",6,"9 6",.45)+flake(360,140,.9)+pill(90,90,"AIRE PREACONDICIONADO","#1A1D21","#7AD3FF",9);
+  return W(o)},
+59(){ // agua potable
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#2B8CFF"),"M80,330 L150,206",.3)+after(flow("M150,190 L158,160","#7AD3FF",4,"5 4",.4),.34);
+  o+=after(bobAt(320,110,`<circle r="18" fill="#2B8CFF" opacity=".2"/>${dropI(0,0,1.2)}`,3,1.4),.34)+pill(310,232,"AGUA POTABLE","#1A1D21","#7AD3FF");
+  return W(o)},
+60(){ // recarga de agua
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#2B8CFF"),"M80,330 L150,206",.3)+after(flow("M150,190 L158,160","#7AD3FF",4,"5 4",.4),.34);
+  o+=`<rect x="290" y="80" width="80" height="60" rx="6" fill="#0E141A"/>${txt(330,96,"TANQUE","#9AA6B2",8)}`+meter(325,100,34,"#2B8CFF","0.15;0.95;0.95;0.15",9)+pill(310,232,"RECARGA DE AGUA","#1A1D21","#7AD3FF");
+  return W(o)},
+61(){ // aguas residuales
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#6B4630"),"M60,330 L130,206",.3)+after(flow("M150,160 L140,190","#A16207",4,"5 4",.4),.34);
+  o+=pill(130,236,"LAV","#6B4630","#fff")+pill(310,232,"AGUAS RESIDUALES","#1A1D21","#F2A900",9)+cone(110,180)+person(170,210);
+  return W(o)},
+62(){ // limpieza interior
+  let o=apronP()+`<rect x="40" y="110" width="320" height="80" rx="40" fill="#F4F6F8" stroke="#B9C4CF" stroke-width="3"/>`;
+  for(let k=0;k<11;k++)o+=`<rect x="${82+k*24}" y="120" width="14" height="22" rx="3" fill="#7FA1BF"/><rect x="${82+k*24}" y="158" width="14" height="22" rx="3" fill="#7FA1BF"/>`;
+  o+=`<path d="M60,150 L340,150" stroke="#E9E4DA" stroke-width="12"/>`+mv(`${person(0,0,"#2BA94E")}`,"M70,150 L330,150 L70,150",8)+mv(`${person(0,0,"#2BA94E")}`,"M330,150 L70,150 L330,150",9);
+  o+=parts(200,150,"#BDE7FF",6,30,-90,1.4,2.5)+pill(200,80,"LIMPIEZA INTERIOR","#2BA94E","#fff");
+  return W(o)},
+63(){ // limpieza exterior
+  let o=apronP()+parkedP(200,150,2.8);
+  o+=`<g><rect x="-6" y="-80" width="12" height="160" rx="3" fill="#2B5D8A"/>${[-60,-30,0,30,60].map(y=>`<circle cy="${y}" r="5" fill="#7AD3FF"/>`).join("")}<animateMotion dur="7s" repeatCount="indefinite" path="M120,150 L290,150 L120,150"/></g>`;
+  o+=fall(18,"#E0F2FE",9)+pill(200,262,"LAVADO EXTERIOR","#2B5D8A","#fff");
+  return W(o)},
+64(){ // catering
+  let o=apronP()+parkedP();
+  o+=arrive(veh("boxt","#C4122F"),"M330,-40 L232,110",.3,D9,"auto");
+  o+=`<rect x="208" y="94" width="34" height="22" fill="#F4F4F4" stroke="#C4122F" stroke-width="2" opacity="0"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.32;.36;.95;1" dur="9s" repeatCount="indefinite"/><animate attributeName="y" values="94;94;120;120;94" keyTimes="0;.32;.45;.95;1" dur="9s" repeatCount="indefinite"/></rect>`;
+  o+=after(stream("M226,130 L226,145",2,1.5,()=>`<rect x="-5" y="-3" width="10" height="6" fill="#C4122F"/>`),.45)+pill(90,232,"CATERING","#C4122F","#fff");
+  return W(o)},
+65(){ // lubricantes
+  let o=apronP()+parkedP(200,150,2.8);
+  o+=person(178,190,"#2B5D8A")+`<g transform="translate(192,190)"><rect x="-5" y="-8" width="10" height="14" rx="2" fill="#F2A900"/><rect x="5" y="-6" width="8" height="2" fill="#333"/></g>`;
+  o+=parts(186,176,"#A16207",5,14,-100,1.2,2)+bobAt(300,90,`<circle r="18" fill="#F2A900" opacity=".25"/>${dropI(0,0,1.1,"#A16207")}`)+pill(300,232,"LUBRICANTES","#1A1D21","#F2A900");
+  return W(o)},
+66(){ // deshielo
+  let o=joints("#D9DFE5")+parkedP(200,150,2.6,0,"#F4F6F8");
+  o+=`<g transform="translate(160,236)">${veh("tank","#F2A900")}</g>`+`<g transform="translate(240,64) rotate(180)">${veh("tank","#F2A900")}</g>`;
+  o+=parts(176,224,"#FF8A1A",9,60,-80,1.1,3)+parts(224,76,"#FF8A1A",9,60,90,1.1,3);
+  o+=fall(26,"#fff",5)+pill(330,262,"TIPO I · NARANJA","#1A1D21","#FF8A1A",9);
+  return W(o)},
+67(){ // antihielo
+  let o=joints("#D9DFE5")+parkedP(200,150,2.6,0,"#F4F6F8");
+  o+=`<g transform="translate(160,236)">${veh("tank","#2BA94E")}</g>`+`<g transform="translate(240,64) rotate(180)">${veh("tank","#2BA94E")}</g>`;
+  o+=parts(176,224,"#4ADE80",9,60,-80,1.3,3)+parts(224,76,"#4ADE80",9,60,90,1.3,3);
+  o+=`<rect x="140" y="138" width="110" height="24" rx="12" fill="#4ADE80" opacity=".18" class="glow"/>`+fall(14,"#fff",8)+pill(330,262,"TIPO IV · VERDE","#1A1D21","#4ADE80",9);
+  return W(o)},
+68(){ // despacho
+  let o=floorT("#D9DDE1");
+  o+=`<rect x="40" y="46" width="320" height="170" rx="8" fill="#0E141A" stroke="#3A4552" stroke-width="3"/>`;
+  o+=`<path d="M70,180 C130,80 250,80 330,120" stroke="#2B5D8A" stroke-width="2" fill="none" stroke-dasharray="5 5"/><circle cx="70" cy="180" r="5" fill="#57E89A"/><circle cx="330" cy="120" r="5" fill="#F2C200"/>${txt(70,200,"MEX","#57E89A",10)}${txt(330,140,"CUN","#F2C200",10)}`;
+  o+=mv(`<g transform="scale(.8)"><path d="${PLANE}" fill="#fff"/></g>`,"M70,180 C130,80 250,80 330,120",6);
+  o+=txt(60,66,"PLAN DE VUELO","#9AA6B2",9,"start")+txt(340,66,"COMBUSTIBLE  ·  PESO  ·  METEO","#9AA6B2",8,"end");
+  o+=icon("doc",350,240,.9)+person(70,246,"#2B5D8A");
+  return W(o)},
+69(){ // suministro de combustible (hidrante)
+  let o=apronP()+parkedP();
+  o+=`<rect x="152" y="236" width="14" height="14" rx="2" fill="#1A1D21"/><circle cx="159" cy="243" r="4" fill="#F2C200"/>`;
+  o+=arrive(veh("van","#F4F4F4"),"M-40,262 L132,236",.3)+after(flow("M159,243 L140,236","#F2C200",3,"5 4",.4)+flow("M132,232 Q150,200 178,190","#F2C200",3,"5 4",.4),.34);
+  o+=pill(310,232,"HIDRANTE","#1A1D21","#F2C200")+cone(110,200)+cone(220,212);
+  return W(o)},
+70(){ // abastecimiento con autotanque
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#F4F4F4"),"M-60,240 L140,226",.3)+after(flow("M150,218 Q166,200 178,188","#F2C200",3,"5 4",.4),.34);
+  o+=txt(140,229,"JET A-1","#1A1D21",7)+pill(310,232,"TURBOSINA","#1A1D21","#F2C200")+cone(110,196)+cone(230,214);
+  return W(o)},
+71(){ // almacenamiento de combustible
+  let o=grass()+`<rect x="20" y="40" width="360" height="220" fill="#B7AE9A" stroke="#8C836F" stroke-width="6"/>`;
+  [[90,110],[200,110],[310,110],[90,200],[200,200],[310,200]].forEach(([x,y],i)=>o+=tankTop(x,y,40)+meter(x-5,y-18,36,"#F2C200",i%2?"0.4;0.85;0.4":"0.8;0.35;0.8",6+i));
+  o+=pill(200,262,"PLANTA DE COMBUSTIBLE","#1A1D21","#F2C200");
+  return W(o)},
+72(){ // distribución de combustible
+  let o=grass()+tankTop(60,90,34)+tankTop(60,200,34);
+  o+=`<rect x="200" y="40" width="220" height="220" fill="#C3C8CE"/>`+parkedP(330,150,2,-90);
+  o+=flow("M94,90 L160,90 L160,150 L300,150","#F2C200",4,"8 6",.5)+flow("M94,200 L160,200 L160,150","#F2C200",4,"8 6",.5)+flow("M240,150 L240,230 L300,230","#F2C200",3,"6 5",.5);
+  [[300,150],[300,230]].forEach(([x,y])=>o+=`<rect x="${x-6}" y="${y-6}" width="12" height="12" fill="#1A1D21"/>`);
+  o+=mv(veh("tank","#F4F4F4"),"M-60,262 L460,262",9)+pill(160,120,"RED DE HIDRANTES","#1A1D21","#F2C200",9);
+  return W(o)},
+73(){ // succión / extracción
+  let o=apronP()+parkedP();
+  o+=arrive(veh("tank","#F4F4F4"),"M-60,240 L140,226",.3)+after(flow("M178,188 Q166,200 150,218","#FF6B6B",3,"5 4",.4),.34);
+  o+=meter(270,86,44,"#F2C200","0.9;0.9;0.1;0.1",9)+txt(275,146,"TANQUE","#1A1D21",8)+pill(320,232,"DEFUELING","#1A1D21","#FF6B6B");
+  return W(o)},
+74(){ // mantenimiento de aeronaves
+  let o=joints("#B7BEC6")+`<rect x="-20" y="-20" width="440" height="40" fill="#5A6470"/>`+parkedP(200,150,2.8);
+  o+=`<rect x="150" y="96" width="30" height="14" rx="3" fill="#2B5D8A" opacity=".85"/>`+person(140,104,"#F2A900")+person(250,200,"#F2A900")+person(110,180,"#2BA94E");
+  o+=spinAt(140,104,`<g transform="translate(14,0)">${ICON.tools}</g>`,3)+`<rect x="280" y="210" width="40" height="22" rx="3" fill="#C4122F"/>${txt(300,225,"TOOLS","#fff",8)}`;
+  o+=pill(200,262,"HANGAR · MRO","#1A1D21","#F2C200");
+  return W(o)},
+75(){ // reparación de aeronaves
+  let o=joints("#B7BEC6")+parkedP(200,150,2.8);
+  [[176,96],[176,204],[140,150]].forEach(([x,y])=>o+=`<rect x="${x-5}" y="${y-5}" width="10" height="10" fill="#F2A900" stroke="#333"/>`);
+  o+=`<rect x="200" y="140" width="22" height="16" fill="#9AA6B2" stroke="#C4122F" stroke-width="2" stroke-dasharray="3 2"/>`+parts(211,148,"#FFD166",8,18,-90,.5,1.6)+person(214,176,"#2B5D8A");
+  o+=pill(200,262,"REPARACIÓN ESTRUCTURAL","#1A1D21","#F2C200",9);
+  return W(o)},
+77(){ // servicios de grúa
+  let o=apronP()+`<path d="M-40,200 L240,200 Q300,200 300,140 L300,-40" stroke="#F2C200" stroke-width="3" fill="none"/>`;
+  o+=`<g><g>${plane(2.3)}<g transform="translate(-8,0)"><rect x="-12" y="-9" width="34" height="18" rx="4" fill="#F2A900" stroke="#9a7c00"/></g></g><animateMotion dur="11s" repeatCount="indefinite" rotate="auto" path="M-80,200 L240,200 Q300,200 300,140 L300,-80"/></g>`;
+  o+=pill(110,90,"TOWBARLESS","#1A1D21","#F2A900")+person(120,240,"#F2A900");
+  return W(o)},
+78(){ // derrames de combustible
+  let o=apronP()+parkedP(190,110,2.3);
+  o+=`<ellipse cx="180" cy="200" rx="60" ry="26" fill="#3B2F4A" opacity=".55"><animate attributeName="rx" values="60;60;20;20" keyTimes="0;.3;.8;1" dur="9s" repeatCount="indefinite"/><animate attributeName="ry" values="26;26;8;8" keyTimes="0;.3;.8;1" dur="9s" repeatCount="indefinite"/></ellipse>`;
+  [[120,170],[240,170],[110,232],[250,232]].forEach(([x,y])=>o+=cone(x,y));
+  o+=stream("M90,262 L180,206",3,3,()=>`<rect x="-6" y="-6" width="12" height="12" fill="#fff" stroke="#9AA6B2"/>`)+person(80,262,"#F2A900")+person(290,200,"#F2A900");
+  o+=pill(320,250,"DERRAME","#C4122F","#fff");
+  return W(o)},
+79(){ // enfriamiento de frenos
+  let o=apronP()+parkedP(200,150,2.8);
+  [[178,126],[178,174]].forEach(([x,y],i)=>o+=`<circle cx="${x}" cy="${y}" r="9" fill="#FF3B3B"><animate attributeName="fill" values="#FF3B3B;#F97316;#6B7280" dur="6s" repeatCount="indefinite"/></circle>`+fanAt(x-46,y+(i?40:-40),14,.4)+flow(`M${x-36},${y+(i?30:-30)} L${x-10},${y+(i?8:-8)}`,"#BDE7FF",3,"4 4",.3));
+  o+=meter(320,90,60,"#FF3B3B","0.95;0.2",6)+txt(326,166,"°C","#1A1D21",10)+pill(320,232,"ENFRIAMIENTO","#1A1D21","#7AD3FF",9);
+  return W(o)},
+80(){ // servicios de apoyo en tierra
+  let o=apronP()+parkedP();
+  o+=arrive(veh("gpu"),"M330,330 L280,190",.25)+after(flow("M276,180 Q260,160 238,150","#F2C200",3,"6 5",.4),.3);
+  o+=arrive(veh("tank","#2B8CFF"),"M60,330 L150,206",.35)+after(flow("M150,190 L158,160","#7AD3FF",4,"5 4",.4),.4);
+  o+=arrive(veh("tank","#7FB3D5"),"M330,-40 L260,94",.45)+after(flow("M250,100 Q226,116 210,140","#7AD3FF",4,"8 6",.5),.5);
+  o+=`<g opacity=".95">${pill(80,70,"GPU · AGUA · AIRE","#1A1D21","#F2C200",9)}</g>`;
+  return W(o)},
+81(){ // servicio de tráfico (ATS)
+  let o=`<rect x="-20" y="-20" width="440" height="340" fill="#0B1A12"/>`;
+  [40,80,120].forEach(r=>o+=`<circle cx="200" cy="150" r="${r}" fill="none" stroke="#1F5F3A" stroke-width="1.5"/>`);
+  o+=`<line x1="80" y1="150" x2="320" y2="150" stroke="#1F5F3A"/><line x1="200" y1="30" x2="200" y2="270" stroke="#1F5F3A"/>`;
+  o+=spinAt(200,150,`<path d="M0,0 L120,0 A120,120 0 0 0 103,-62Z" fill="#57E89A" opacity=".28"/><line x1="0" y1="0" x2="120" y2="0" stroke="#57E89A" stroke-width="2"/>`,4);
+  [[260,100,"AM512 FL350"],[140,210,"Y4230 FL120"],[290,200,"VB118 FL080"]].forEach(([x,y,t],i)=>o+=mvs(`<circle r="4" fill="#57E89A" class="glow"/>${txt(8,-6,t,"#57E89A",8,"start")}`,`M${x},${y} l${i%2?30:-30},${i?-20:20}`,8));
+  return W(o)},
+82(){ // documentación de pasajeros
+  let o=floorT("#E7E1D6")+room();
+  [60,140].forEach(x=>o+=`<rect x="${x-16}" y="96" width="32" height="44" rx="4" fill="#2B5D8A"/><rect x="${x-11}" y="101" width="22" height="16" fill="#9FD3F2" class="glow" style="animation-duration:3s"/>`);
+  o+=counter(220,110,70)+counter(310,110,70);
+  o+=`<rect x="248" y="96" width="14" height="10" fill="#fff" stroke="#9AA6B2"><animate attributeName="y" values="96;84;84;96" dur="3s" repeatCount="indefinite"/></rect>`;
+  o+=crowd("M60,300 L60,150",2,5)+crowd("M255,300 L255,140",3,6)+crowd("M345,300 L345,140",3,6.5);
+  o+=pill(100,74,"KIOSCOS","#1A1D21","#7AD3FF")+pill(300,74,"PASE DE ABORDAR","#1A1D21","#F2C200",9);
+  return W(o)},
+83(){ // documentación de equipaje
+  let o=floorT("#E7E1D6")+room()+counter(150,120,100);
+  o+=`<rect x="118" y="150" width="34" height="30" rx="3" fill="#5A6470"/>${txt(135,196,"BÁSCULA","#1A1D21",8)}`;
+  o+=`<rect x="160" y="132" width="40" height="16" rx="3" fill="#0E141A"/><text x="180" y="144" ${F} font-size="10" fill="#57E89A" text-anchor="middle">23.0 kg</text>`;
+  o+=`<g transform="translate(135,165)">${bag("#C4122F")}<rect x="4" y="-2" width="10" height="4" fill="#F2C200"><animate attributeName="width" values="0;10;10" dur="3s" repeatCount="indefinite"/></rect></g>`;
+  o+=belt(150,84,420,10)+bags("M150,84 L420,84",3,4)+person(135,230,"#FFD166");
+  return W(o)},
+84(){ // documentación de carga
+  let o=floorT("#D9DDE1")+counter(60,100,110)+icon("doc",115,74,.8);
+  o+=`<rect x="200" y="140" width="120" height="70" fill="#8B6B4A" opacity=".25" stroke="#8B6B4A"/>`+[0,1,2,3,4,5].map(i=>`<g transform="translate(${218+(i%3)*28},${158+Math.floor(i/3)*28})">${box()}</g>`).join("");
+  o+=scanLine(200,140,120,70,"#F2C200")+pill(260,120,"AWB · GUÍA AÉREA","#1A1D21","#F2C200",9)+person(115,150,"#FFD166");
+  return W(o)},
+85(){ // documentación de correo
+  let o=floorT("#D9DDE1")+belt(-20,160,420,20)+stream("M-20,160 L420,160",5,9,()=>sack());
+  o+=`<rect x="170" y="130" width="60" height="60" rx="5" fill="none" stroke="#2B5D8A" stroke-width="4"/>`+scanLine(170,130,60,60,"#7AD3FF");
+  o+=icon("mail",90,90,1)+pill(300,90,"MANIFIESTO POSTAL","#2B5D8A","#F2C200",9)+person(200,220,"#2B5D8A");
+  return W(o)},
+86(){ // manejo de equipaje (BHS)
+  let o=floorT("#D9DDE1");
+  o+=belt(-20,100,240,14)+`<path d="M232,100 L300,60 L420,60 M232,100 L420,100 M232,100 L300,140 L420,140" stroke="#3A3F45" stroke-width="14" fill="none"/>`;
+  o+=bags("M-20,100 L232,100 L300,60 L420,60",3,6)+stream("M-20,100 L232,100 L420,100",3,6,i=>bag(BAGC[(i+2)%6]))+stream("M-20,100 L232,100 L300,140 L420,140",3,6,i=>bag(BAGC[(i+4)%6]));
+  o+=mv(`${veh("tug")}${[1,2,3].map(k=>`<g transform="translate(${-6-k*20},0)"><rect x="-8" y="-6" width="16" height="12" rx="2" fill="#2B5D8A"/></g>`).join("")}`,"M-60,220 L460,220",8);
+  o+=pill(330,40,"VUELO 512","#1A1D21","#F2C200",8)+pill(330,180,"VUELO 230","#1A1D21","#57E89A",8);
+  return W(o)},
+87(){ // almacenamiento de equipaje
+  let o=floorT("#E2DDD3");
+  for(let r=0;r<3;r++){o+=`<rect x="40" y="${60+r*56}" width="230" height="40" fill="#9AA6B2" stroke="#6C7783"/>`;for(let k=0;k<6;k++)o+=`<g transform="translate(${62+k*36},${80+r*56})">${bag(BAGC[(k+r)%6])}</g>`}
+  o+=counter(300,140,80)+icon("key",340,100,.8)+crowd("M400,300 L340,170",2,6);
+  o+=pill(155,240,"CONSIGNA","#1A1D21","#F2C200");
+  return W(o)},
+88(){ // almacenamiento de carga
+  let o=floorT("#C9CED3");
+  for(let r=0;r<3;r++){o+=`<rect x="30" y="${50+r*70}" width="250" height="34" fill="#C2410C" opacity=".25" stroke="#C2410C" stroke-width="2"/>`;for(let k=0;k<7;k++)o+=`<g transform="translate(${46+k*35},${67+r*70})">${box(["#C99A4B","#B8860B","#A0522D"][k%3])}</g>`}
+  o+=mv(`${veh("fork")}<g transform="translate(18,0)">${box()}</g>`,"M330,280 L330,120 L300,120 L330,120 L330,280",9,'rotate="auto"');
+  o+=`<rect x="340" y="40" width="50" height="40" rx="4" fill="#7AD3FF" opacity=".5"/>${txt(365,64,"FRÍO","#0E141A",9)}`;
+  return W(o)},
+89(){ // guarda de carga
+  let o=floorT("#C9CED3")+`<rect x="110" y="80" width="180" height="130" rx="6" fill="#5A6470" stroke="#1A1D21" stroke-width="4"/>`;
+  o+=[0,1,2].map(i=>`<g transform="translate(${150+i*50},145)">${uld()}</g>`).join("");
+  o+=`<circle cx="270" cy="145" r="10" fill="none" stroke="#F2C200" stroke-width="3"/><rect x="266" y="145" width="8" height="10" fill="#F2C200"/>`;
+  o+=camAt(40,60,10,70)+camAt(360,60,110,170)+camAt(40,240,-70,-10)+mv(person(0,0,"#1A1D21"),"M60,250 L340,250 L340,60 L60,60Z",14);
+  o+=pill(200,262,"CADENA DE CUSTODIA","#1A1D21","#57E89A",9);
+  return W(o)},
+90(){ // manejo de mercancías
+  let o=floorT("#C9CED3")+belt(30,90,370,16)+stream("M30,90 L370,90",5,7,()=>box());
+  o+=`<rect x="140" y="150" width="120" height="70" fill="#9AA6B2" stroke="#6C7783"/>`+[0,1,2,3,4,5].map(i=>`<g transform="translate(${158+(i%3)*42},${170+Math.floor(i/3)*30})"><g opacity="0">${box()}<animate attributeName="opacity" values="0;0;1;1" keyTimes="0;${(i/7).toFixed(2)};${(i/7+.05).toFixed(2)};1" dur="7s" repeatCount="indefinite"/></g></g>`).join("");
+  o+=mv(veh("fork"),"M60,250 L340,250 L60,250",8)+pill(200,130,"PALETIZACIÓN","#1A1D21","#F2C200");
+  return W(o)},
+91(){ // carga y descarga (high loader)
+  let o=apronP()+parkedP(220,120,3,0,"#F4F6F8");
+  o+=`<rect x="200" y="150" width="54" height="56" rx="3" fill="#F2A900"/><rect x="204" y="154" width="46" height="48" fill="#FFD166"><animate attributeName="height" values="48;20;48" dur="4s" repeatCount="indefinite"/></rect>`;
+  o+=stream("M30,250 L227,250 L227,190",3,6,()=>uld())+stream("M227,190 L227,250 L390,250",2,6,()=>uld("#D6DEE6"));
+  o+=pill(90,200,"HIGH LOADER","#1A1D21","#F2A900");
+  return W(o)},
+92(){ // transporte terrestre de pasajeros
+  let o=apronP()+`<rect x="-20" y="-20" width="140" height="340" fill="#E9E1D5"/>`+txt(50,150,"TERMINAL","#6C7783",11)+parkedP(320,130,2.4,-90);
+  o+=`<g>${veh("bus","#2B5D8A")}<animateMotion dur="10s" repeatCount="indefinite" rotate="auto" keyPoints="0;.5;.5;1;1" keyTimes="0;.35;.5;.85;1" calcMode="linear" path="M140,230 L300,230 L300,232 L140,230"/></g>`;
+  o+=crowd("M300,220 L320,170",3,3)+pill(220,70,"POSICIÓN REMOTA","#1A1D21","#F2C200",9);
+  return W(o)},
+93(){ // apoyo a pasajeros
+  let o=floorT("#E7E1D6")+room()+`<rect x="150" y="110" width="100" height="40" rx="20" fill="#2B8CFF"/>`+icon("info",200,130,.75)+person(200,98,"#2B5D8A");
+  o+=crowd("M-20,220 L170,170",3,7)+crowd("M420,220 L230,170",2,8)+ring(200,130,"#2B8CFF",24,54);
+  o+=pill(200,250,"ORIENTACIÓN AL PASAJERO","#2B8CFF","#fff",9);
+  return W(o)},
+94(){ // información al pasajero
+  let o=floorT("#E7E1D6")+room()+fids(40,60,150,96,"SALIDAS",5)+fids(210,60,150,96,"LLEGADAS",5);
+  o+=`<g transform="translate(200,200)"><rect x="-10" y="-8" width="14" height="16" fill="#1A1D21"/><path d="M4,-8 L16,-16 V16 L4,8Z" fill="#1A1D21"/></g>`+[0,1,2].map(i=>ring(216,200,"#2B8CFF",8,34,i*.7,2)).join("");
+  o+=crowd("M-20,250 L420,250",4,12);
+  return W(o)},
+95(){ // necesidades especiales
+  let o=floorT("#E7E1D6")+room();
+  o+=`<path d="M-20,190 L420,190" stroke="#F2C200" stroke-width="10" stroke-dasharray="4 4" opacity=".7"/>`;
+  o+=mvs(`<g transform="rotate(90)">${ICON.wheel}</g>${person(-20,0,"#2B5D8A")}`,"M-40,190 L440,190",10);
+  o+=icon("wheel",80,100,1.1)+pill(250,100,"ASISTENCIA ESPECIAL","#2B8CFF","#fff",9)+mv(veh("cart","#2BA94E"),"M440,240 L-40,240",9);
+  return W(o)},
+96(){ // seguridad operacional (SMS)
+  let o=floorT("#E2E7EB");
+  const st=[["IDENTIFICAR","#C4122F"],["EVALUAR","#F2A900"],["CONTROLAR","#2B5D8A"],["VERIFICAR","#2BA94E"]];
+  st.forEach(([t,c],i)=>{const a=(-90+i*90)*Math.PI/180,x=200+92*Math.cos(a),y=150+92*Math.sin(a);o+=`<rect x="${(x-44).toFixed(1)}" y="${(y-14).toFixed(1)}" width="88" height="28" rx="14" fill="${c}"/>`+txt(x,y+4,t,"#fff",9)});
+  o+=spinAt(200,150,`<circle r="62" fill="none" stroke="#1A1D21" stroke-width="4" stroke-dasharray="40 20"/><path d="M62,-8 l8,10 l-14,4z" fill="#1A1D21"/>`,8);
+  o+=icon("shield",200,150,1.3)+txt(200,186,"SMS","#1A1D21",12);
+  return W(o)},
+97(){ // vigilancia de plataforma
+  let o=apronP()+parkedP(110,110,2)+parkedP(290,110,2);
+  o+=`<line x1="-20" y1="200" x2="420" y2="200" stroke="#F2C200" stroke-width="2" stroke-dasharray="10 8"/>`;
+  o+=mv(`<path d="M10,0 L70,-30 L70,30Z" fill="#F2C200" opacity=".2"/>${veh("patrol","#F4F4F4")}`,"M-40,226 L440,226",9);
+  o+=person(210,170,"#F2A900")+icon("doc",360,240,.7)+pill(200,62,"INSPECCIÓN DE PLATAFORMA","#1A1D21","#F2C200",9);
+  return W(o)},
+98(){ // vigilancia de áreas de movimiento
+  let o=grass()+runwayH(110,80);
+  for(let x=0;x<440;x+=34)o+=`<rect x="${x}" y="148.5" width="18" height="3" fill="#ECEEF0"/>`;
+  o+=`<g transform="translate(260,170)"><rect x="-5" y="-3" width="10" height="6" fill="#C4122F"/></g>`+ring(260,170,"#FF3B3B",6,28);
+  o+=`<g>${veh("patrol","#F4F4F4")}<animateMotion dur="9s" repeatCount="indefinite" rotate="auto" keyPoints="0;.6;.6;1" keyTimes="0;.4;.7;1" calcMode="linear" path="M-40,170 L440,170"/></g>`;
+  o+=pill(260,214,"FOD DETECTADO","#C4122F","#fff",9);
+  return W(o)},
+99(){ // control de accesos al lado aire
+  let o=joints("#C3C8CE")+`<rect x="-20" y="-20" width="210" height="340" fill="#9BA7A0"/>`+fence(190,-20,190,110)+fence(190,190,190,320);
+  o+=`<rect x="-20" y="118" width="440" height="64" fill="#4A5057"/><rect x="170" y="70" width="40" height="40" rx="4" fill="#E9E1D5"/>${txt(190,95,"PUESTO","#6C7783",8)}`;
+  o+=barrier(190,150,40,1)+`<circle cx="176" cy="130" r="5" fill="#57E89A"><animate attributeName="fill" values="#FF3B3B;#FF3B3B;#57E89A;#57E89A;#FF3B3B" keyTimes="0;.24;.26;.7;1" dur="9s" repeatCount="indefinite"/></circle>`;
+  o+=`<g>${car("#2B5D8A",28,14)}<animateMotion dur="9s" repeatCount="indefinite" keyPoints="0;.4;.4;1" keyTimes="0;.22;.33;1" calcMode="linear" path="M-40,150 L440,150"/></g>`;
+  o+=pill(90,220,"LADO TIERRA","#2BA94E","#fff",9)+pill(310,220,"LADO AIRE","#2B5D8A","#fff",9);
+  return W(o)},
+100(){ // inspección de instalaciones
+  let o=floorT("#D9DDE1")+bldg(20,50,160,110,"#E9E1D5")+bldg(220,50,160,110,"#E9E1D5");
+  [[60,90],[140,130],[260,90],[340,130]].forEach(([x,y],i)=>o+=`<circle cx="${x}" cy="${y}" r="10" fill="#fff" stroke="#9AA6B2"/><path d="M${x-5},${y} l4,4 l7,-8" fill="none" stroke="#2BA94E" stroke-width="3" stroke-dasharray="20" stroke-dashoffset="20"><animate attributeName="stroke-dashoffset" values="20;20;0;0" keyTimes="0;${(.15+i*.2).toFixed(2)};${(.2+i*.2).toFixed(2)};1" dur="8s" repeatCount="indefinite"/></path>`);
+  o+=mv(person(0,0,"#F2A900"),"M60,190 L340,190 L60,190",8)+icon("doc",200,230,.8);
+  return W(o)},
+101(){ // supervisión de operaciones
+  let o=floorT("#1F262E");
+  [[30,50],[150,50],[270,50]].forEach(([x,y],i)=>o+=`<rect x="${x}" y="${y}" width="100" height="64" rx="4" fill="#0E141A" stroke="#3A4552" stroke-width="2"/>`);
+  o+=`<g transform="translate(80,82) scale(.35)">${parkedP(0,0,1.6)}</g>`+fids(150,50,100,64,"OPERACIONES",3)+`<rect x="276" y="56" width="88" height="52" fill="#123"/>`+spinAt(320,82,`<path d="M0,0 L24,0 A24,24 0 0 0 21,-12Z" fill="#57E89A" opacity=".5"/>`,3);
+  o+=`<rect x="40" y="150" width="320" height="30" rx="6" fill="#3A4552"/>`+[90,170,250,330].map(x=>person(x,200,"#2B5D8A")).join("");
+  o+=[0,1].map(i=>ring(200,240,"#57E89A",6,40,i*1.2)).join("");
+  return W(o)},
+102(){ // atención de emergencias
+  let o=apronP()+`<circle cx="200" cy="150" r="70" fill="#C4122F" opacity=".1"/>`+bldg(170,124,60,52,"#C4122F","PC","#fff");
+  o+=[0,1,2].map(i=>ring(200,150,"#FF3B3B",30,110,i*.8)).join("");
+  o+=arrive(veh("fire"),"M-60,80 L150,120",.35)+arrive(veh("amb"),"M460,80 L250,120",.4)+arrive(veh("patrol","#1A1D21"),"M200,340 L200,200",.45);
+  o+=pill(200,262,"PLAN DE EMERGENCIA","#C4122F","#fff",9);
+  return W(o)},
+103(){ // servicios médicos de emergencia
+  let o=floorT("#D6D0C6")+bldg(-20,30,440,70,"#E9E1D5")+`<rect x="160" y="88" width="80" height="12" fill="#7FB3D5"/>`;
+  o+=crossI(200,60,1.2)+`<rect x="-20" y="140" width="440" height="80" fill="#4A5057"/>`;
+  o+=arrive(veh("amb"),"M-60,180 L180,180",.4)+after(crowd("M190,170 L200,104",2,2.4),.45)+heartLine(250,250,110,"#E01E2B")+pill(90,250,"ATENCIÓN MÉDICA","#E01E2B","#fff",9);
+  return W(o)},
+104(){ // rescate aeroportuario
+  let o=grass()+runwayH(60,60)+parkedP(200,180,2.6,15);
+  o+=arrive(veh("fire"),"M-60,250 L120,220",.3)+arrive(veh("amb"),"M460,250 L290,230",.35);
+  o+=after(stream("M190,170 L150,240",3,3,()=>`<rect x="-9" y="-4" width="18" height="8" rx="2" fill="#F4F4F4" stroke="#E01E2B"/>`),.4)+person(160,200,"#E01E2B")+person(230,210,"#E01E2B");
+  o+=pill(320,100,"RESCATE","#E01E2B","#fff");
+  return W(o)},
+105(){ // fauna
+  let o=grass()+runwayH(150,64);
+  const bird=`<path d="M-10,0 Q-5,-6 0,0 Q5,-6 10,0" fill="none" stroke="#1A1D21" stroke-width="2.5" stroke-linecap="round"><animate attributeName="d" values="M-10,0 Q-5,-6 0,0 Q5,-6 10,0;M-10,-3 Q-5,3 0,0 Q5,3 10,-3;M-10,0 Q-5,-6 0,0 Q5,-6 10,0" dur=".5s" repeatCount="indefinite"/></path>`;
+  [[0,"M140,180 C160,120 260,80 440,40"],[1,"M170,190 C190,130 300,100 440,70"],[2,"M120,170 C140,110 240,60 430,20"],[3,"M200,186 C220,140 330,120 440,100"]].forEach(([i,p])=>o+=`<g>${bird}<animateMotion dur="5s" begin="${-i*1.2}s" repeatCount="indefinite" path="${p}"/></g>`);
+  o+=`<g transform="translate(80,250)">${veh("patrol","#F4F4F4")}</g>`+[0,1,2].map(i=>ring(92,250,"#F2A900",8,60,i*.7,2)).join("");
+  o+=pill(300,250,"PELIGRO AVIARIO","#1A1D21","#F2A900",9);
+  return W(o)},
+106(){ // control de derrames
+  let o=apronP()+`<rect x="280" y="190" width="40" height="40" fill="#1A1D21"/>${[0,1,2,3].map(i=>`<line x1="${284+i*10}" y1="192" x2="${284+i*10}" y2="228" stroke="#555" stroke-width="2"/>`).join("")}`;
+  o+=`<rect x="270" y="180" width="60" height="60" rx="6" fill="none" stroke="#F2C200" stroke-width="5"/>`;
+  o+=`<ellipse cx="170" cy="190" rx="70" ry="30" fill="#3B2F4A" opacity=".5"><animate attributeName="rx" values="70;24" dur="7s" repeatCount="indefinite"/><animate attributeName="ry" values="30;10" dur="7s" repeatCount="indefinite"/></ellipse>`;
+  o+=`<path d="M90,150 Q170,120 250,150 Q270,190 250,230 Q170,260 90,230 Q70,190 90,150Z" fill="none" stroke="#F2A900" stroke-width="6" stroke-dasharray="10 4"/>`;
+  o+=person(70,250,"#F2A900")+person(250,120,"#F2A900")+cone(60,130)+cone(280,130)+pill(200,72,"CONTENCIÓN","#1A1D21","#F2A900");
+  return W(o)},
+107(){ // limpieza de áreas operacionales
+  let o=apronP();
+  const r=rng(9);for(let i=0;i<14;i++){const x=(40+r()*340).toFixed(0),y=(90+r()*140).toFixed(0);o+=`<rect x="${x}" y="${y}" width="5" height="5" fill="#6B4630"><animate attributeName="opacity" values="1;1;0;0;1" keyTimes="0;${(x/440*.9).toFixed(2)};${(x/440*.9+.02).toFixed(2)};.98;1" dur="9s" repeatCount="indefinite"/></rect>`}
+  o+=mv(veh("sweep"),"M-40,160 L440,160",9)+`<rect x="-20" y="152" width="0" height="16" fill="#D3D8DD"><animate attributeName="width" values="0;440" dur="9s" repeatCount="indefinite"/></rect>`;
+  o+=pill(200,62,"PREVENCIÓN DE FOD","#1A1D21","#57E89A");
+  return W(o)},
+108(){ // mantenimiento de pistas
+  let o=grass()+runwayH(100,100);
+  for(let x=0;x<440;x+=34)o+=`<rect x="${x}" y="148.5" width="18" height="3" fill="#ECEEF0"/>`;
+  o+=`<rect x="150" y="120" width="90" height="56" fill="#1F2429"><animate attributeName="fill" values="#6B4630;#1F2429;#3B4249" dur="9s" repeatCount="indefinite"/></rect>`;
+  o+=mvs(`<rect x="-16" y="-14" width="32" height="28" rx="6" fill="#F2C200"/><rect x="10" y="-12" width="8" height="24" rx="4" fill="#5A6470"/>`,"M150,148 L240,148 L150,148",5);
+  [[140,110],[250,110],[140,190],[250,190]].forEach(([x,y])=>o+=cone(x,y));
+  o+=person(120,150,"#F2A900")+pill(200,226,"CIERRE TEMPORAL","#C4122F","#fff",9);
+  return W(o)},
+109(){ // mantenimiento de calles de rodaje
+  let o=grass()+`<rect x="-20" y="120" width="440" height="60" fill="#4A5057"/><line x1="-20" y1="150" x2="420" y2="150" stroke="#F2C200" stroke-width="2.5"/>`;
+  for(let x=0;x<440;x+=30)o+=`<circle cx="${x}" cy="116" r="3" fill="#4C7DFF"/><circle cx="${x}" cy="184" r="3" fill="#4C7DFF"/>`;
+  o+=`<circle cx="210" cy="116" r="5" fill="#333"><animate attributeName="fill" values="#333;#333;#4C7DFF" dur="6s" repeatCount="indefinite"/></circle>`+person(222,100,"#F2A900")+`<g transform="translate(160,92)">${veh("van","#F2A900")}</g>`;
+  o+=cone(250,130)+cone(170,130)+pill(310,230,"CALLE DE RODAJE B","#1A1D21","#F2C200",9);
+  return W(o)},
+110(){ // mantenimiento de plataformas
+  let o=apronP()+parkedP(320,120,2,-90);
+  o+=`<path d="M-20,180 L420,180" stroke="#1A1D21" stroke-width="3" stroke-dasharray="440" stroke-dashoffset="440"><animate attributeName="stroke-dashoffset" values="440;0" dur="7s" repeatCount="indefinite"/></path>`;
+  o+=mvs(`<rect x="-14" y="-10" width="28" height="20" rx="4" fill="#F2A900"/><circle cx="12" cy="0" r="3" fill="#1A1D21"/>`,"M-20,180 L420,180",7);
+  o+=cone(60,160)+cone(220,160)+person(100,210,"#F2A900")+pill(140,90,"SELLADO DE JUNTAS","#1A1D21","#F2C200",9);
+  return W(o)},
+111(){ // mantenimiento de señalización
+  let o=apronP()+`<line x1="200" y1="320" x2="200" y2="60" stroke="#C9B260" stroke-width="4"/>`;
+  o+=`<line x1="200" y1="320" x2="200" y2="60" stroke="#F2C200" stroke-width="4" stroke-dasharray="260" stroke-dashoffset="260"><animate attributeName="stroke-dashoffset" values="260;0" dur="7s" repeatCount="indefinite"/></line>`;
+  o+=mv(`<rect x="-14" y="-10" width="28" height="20" rx="3" fill="#F4F4F4" stroke="#999"/><rect x="10" y="-6" width="6" height="12" fill="#F2C200"/>`,"M200,320 L200,60",7);
+  o+=`<rect x="270" y="90" width="70" height="24" rx="2" fill="#1A1D21" stroke="#F2C200" stroke-width="2"/>${txt(305,107,"B ← A","#F2C200",12)}`+person(305,134,"#F2A900")+parts(305,118,"#7AD3FF",5,14,-90,1,2);
+  return W(o)},
+112(){ // mantenimiento de iluminación
+  let o=night("#101A14")+runwayH(110,80);
+  for(let x=-10,i=0;x<440;x+=30,i++)o+=`<circle class="lt" style="animation-delay:${(i*.05).toFixed(2)}s" cx="${x}" cy="104" r="2.8" fill="#FFF6D6"/>`+(x===200?"":`<circle class="lt" style="animation-delay:${(i*.05).toFixed(2)}s" cx="${x}" cy="196" r="2.8" fill="#FFF6D6"/>`);
+  o+=`<circle cx="200" cy="196" r="4" fill="#333"><animate attributeName="fill" values="#333;#333;#FFF6D6" dur="6s" repeatCount="indefinite"/></circle>`+person(214,214,"#F2A900")+`<g transform="translate(150,240)">${veh("van","#F2A900")}</g>`;
+  o+=bolt(250,240,.8)+pill(320,240,"AYUDAS VISUALES","#1A1D21","#F2C200",9);
+  return W(o)},
+113(){ // gestión de residuos
+  let o=floorT("#D6D0C6");
+  [["#2B5D8A","PAPEL"],["#F2C200","PLÁSTICO"],["#2BA94E","ORGÁNICO"],["#6B7280","OTROS"]].forEach(([c,t],i)=>o+=`<rect x="${40+i*86}" y="70" width="60" height="70" rx="6" fill="${c}"/><rect x="${36+i*86}" y="64" width="68" height="10" rx="3" fill="${c}" opacity=".7"/>`+txt(70+i*86,160,t,"#1A1D21",8));
+  o+=stream("M70,230 L70,100",2,3,()=>`<rect x="-4" y="-5" width="8" height="10" fill="#fff" stroke="#999"/>`)+stream("M156,230 L156,100",2,3.4,()=>`<circle r="5" fill="#7AD3FF" stroke="#2B5D8A"/>`);
+  o+=mv(veh("tank","#2BA94E"),"M-60,250 L460,250",10)+pill(200,40,"SEPARACIÓN","#2BA94E","#fff");
+  return W(o)},
+114(){ // gestión de aguas residuales
+  let o=grass()+[[100,110],[100,200]].map(([x,y])=>`<rect x="${x-50}" y="${y-34}" width="100" height="68" rx="8" fill="#5B7A5A" stroke="#3F5A3E" stroke-width="3"/>`).join("");
+  o+=[[100,110],[100,200]].map(([x,y])=>fanAt(x,y,14,1.2,"#BDE7FF")).join("")+tankTop(300,150,52,"#6CA6C6");
+  o+=spinAt(300,150,`<line x1="-48" y1="0" x2="48" y2="0" stroke="#1A1D21" stroke-width="4"/>`,6);
+  o+=flow("M150,110 L248,150 M150,200 L248,150","#7AD3FF",4,"7 6",.6)+flow("M352,150 L420,150","#2B8CFF",4,"7 6",.6)+pill(300,240,"PTAR","#1A1D21","#7AD3FF");
+  return W(o)},
+115(){ // seguridad y vigilancia
+  let o=grass()+trees(91,16,(x,y)=>y<120)+fence(-20,120,420,120)+apronP().replace('x="-20" y="-20" width="440" height="340"','x="-20" y="124" width="440" height="200"');
+  o+=camAt(80,124,20,160)+camAt(320,124,20,160)+mv(veh("patrol","#1A1D21"),"M-40,150 L440,150",8);
+  o+=`<rect x="140" y="190" width="120" height="60" rx="6" fill="#0E141A" stroke="#3A4552"/>${[0,1,2,3].map(i=>`<rect x="${146+(i%2)*56}" y="${196+Math.floor(i/2)*26}" width="52" height="22" fill="#1F3A2A"><animate attributeName="fill" values="#1F3A2A;#2A5A3E;#1F3A2A" dur="${2+i*.4}s" repeatCount="indefinite"/></rect>`).join("")}`;
+  o+=pill(330,250,"CCTV","#1A1D21","#57E89A");
+  return W(o)},
+116(){ // control de accesos
+  let o=floorT("#D9DDE1")+room();
+  [100,200,300].forEach((x,i)=>o+=`<rect x="${x-34}" y="120" width="10" height="50" fill="#5A6470"/><rect x="${x+24}" y="120" width="10" height="50" fill="#5A6470"/>`+spinAt(x,145,`<line x1="-20" y1="0" x2="20" y2="0" stroke="#9AA6B2" stroke-width="4"/><line x1="0" y1="-20" x2="0" y2="20" stroke="#9AA6B2" stroke-width="4"/>`,3)+`<circle cx="${x-29}" cy="112" r="5" fill="#57E89A" class="lt" style="animation-delay:${i*.5}s"/>`+crowd(`M${x},300 L${x},30`,2,6+i*.5));
+  o+=pill(200,250,"ZONA RESTRINGIDA","#C4122F","#fff",9)+icon("shield",360,80,.8);
+  return W(o)},
+117(){ // inspección de pasajeros (escáner corporal)
+  let o=floorT("#E2DDD3")+room();
+  o+=`<circle cx="200" cy="150" r="40" fill="#E9EEF2" stroke="#5A6470" stroke-width="6"/>`+spinAt(200,150,`<path d="M-40,0 A40,40 0 0 1 0,-40" fill="none" stroke="#57E89A" stroke-width="6"/>`,1.4)+person(200,150,"#FFD166");
+  o+=belt(260,150,420,16)+stream("M260,150 L420,150",3,5,()=>`<rect x="-9" y="-6" width="18" height="12" rx="3" fill="#9AA6B2"/>`);
+  o+=crowd("M60,300 L60,180 L160,150",4,8)+person(120,100,"#2B5D8A")+pill(200,226,"ESCÁNER CORPORAL","#1A1D21","#57E89A",9);
+  return W(o)},
+118(){ // inspección de equipaje (EDS)
+  let o=floorT("#D9DDE1")+belt(-20,150,420,20);
+  o+=`<rect x="150" y="100" width="100" height="100" rx="50" fill="#2B3A4A"/><circle cx="200" cy="150" r="34" fill="#0E141A"/>`+spinAt(200,150,`<circle r="42" fill="none" stroke="#7AD3FF" stroke-width="4" stroke-dasharray="20 12"/>`,1);
+  o+=bags("M-20,150 L420,150",5,8)+pill(200,232,"EDS · TOMOGRAFÍA","#1A1D21","#7AD3FF",9);
+  return W(o)},
+119(){ // vigilancia de edificios
+  let o=floorT("#D6D0C6")+bldg(60,60,280,170,"#E9E1D5")+`<rect x="60" y="210" width="280" height="20" fill="#7FB3D5"/>`;
+  o+=camAt(60,60,0,90)+camAt(340,60,90,180)+camAt(60,230,-90,0)+camAt(340,230,180,270);
+  o+=mv(person(0,0,"#1A1D21"),"M40,40 L360,40 L360,250 L40,250Z",16)+icon("shield",200,140,1.1);
+  return W(o)},
+120(){ // vigilancia de estacionamiento
+  let o=`<rect x="-20" y="-20" width="440" height="340" fill="#565D65"/>`+stalls(20,50,14)+stalls(20,206,14);
+  [33,111,189,267,345].forEach((x,i)=>o+=`<g transform="translate(${x},72) rotate(90)">${car(BAGC[i%6])}</g>`);
+  [59,137,215,293].forEach((x,i)=>o+=`<g transform="translate(${x},228) rotate(-90)">${car(BAGC[(i+3)%6])}</g>`);
+  o+=mv(`<path d="M10,0 L60,-26 L60,26Z" fill="#F2C200" opacity=".2"/>${veh("patrol","#F4F4F4")}`,"M-40,150 L440,150",8)+camAt(380,40,90,150);
+  return W(o)},
+121(){ // servicios médicos
+  let o=floorT("#E6EEF0")+room("#E6EEF0")+`<rect x="60" y="80" width="140" height="80" rx="6" fill="#fff" stroke="#E01E2B" stroke-width="3"/>`+crossI(130,120,1.1);
+  o+=`<rect x="240" y="80" width="110" height="80" rx="6" fill="#0E141A"/>`+heartLine(248,124,90)+txt(295,152,"72 lpm","#57E89A",10);
+  o+=`<g transform="translate(130,210)">${veh("amb")}</g>`+person(240,210,"#E01E2B");
+  return W(o)},
+122(){ // primeros auxilios
+  let o=floorT("#E7E1D6")+room();
+  o+=`<rect x="70" y="90" width="80" height="60" rx="8" fill="#E01E2B"/>`+crossI(110,120,.9,"#fff")+`<rect x="250" y="90" width="70" height="80" rx="8" fill="#2BA94E"/>${bolt(285,122,1,"#fff")}${txt(285,160,"DEA","#fff",11)}`;
+  o+=[0,1].map(i=>ring(285,122,"#57E89A",20,46,i*1.1)).join("")+person(190,190,"#FFD166")+person(210,200,"#E01E2B");
+  o+=heartLine(120,240,160,"#E01E2B");
+  return W(o)},
+123(){ // protección civil
+  let o=floorT("#D6D0C6")+bldg(30,50,190,190,"#E9E1D5")+`<rect x="300" y="110" width="80" height="80" rx="40" fill="#2BA94E" opacity=".2" stroke="#2BA94E" stroke-width="3"/>${txt(340,155,"PUNTO DE","#14532D",8)}${txt(340,166,"REUNIÓN","#14532D",8)}`;
+  o+=flow("M130,150 L340,150","#2BA94E",6,"14 8",.7)+crowd("M60,90 L130,150 L330,150",4,6)+crowd("M60,210 L130,150 L330,150",3,6.5);
+  o+=`<circle cx="70" cy="70" r="8" fill="#FF3B3B" class="lt" style="animation-duration:.8s"/>`+pill(125,262,"EVACUACIÓN","#2BA94E","#fff");
+  return W(o)},
+124(){ // atención de emergencias (terminal)
+  let o=floorT("#E7E1D6")+room();
+  o+=arrive(`${veh("cart","#E01E2B")}<rect x="-26" y="-5" width="16" height="10" rx="2" fill="#F4F4F4" stroke="#E01E2B"/>`,"M-40,170 L180,170",.4);
+  o+=person(220,160,"#FFD166")+after(person(210,184,"#E01E2B")+person(232,180,"#E01E2B"),.42)+[0,1,2].map(i=>ring(220,160,"#FF3B3B",8,50,i*.7)).join("");
+  o+=pill(320,90,"ALERTA MÉDICA","#E01E2B","#fff",9);
+  return W(o)},
+125(){ // limpieza del edificio terminal
+  let o=floorT("#C9C1B4")+`<rect x="-20" y="120" width="0" height="60" fill="#F1ECE4"><animate attributeName="width" values="0;460" dur="9s" repeatCount="indefinite"/></rect>`;
+  o+=mv(veh("scrub","#2B8CFF"),"M-40,150 L440,150",9)+parts(200,150,"#BDE7FF",0)+icon("mop",80,80,.9)+mv(person(0,0,"#2BA94E"),"M300,230 L380,230 L300,230",6);
+  o+=crowd("M-20,260 L420,260",3,14)+pill(260,80,"LIMPIEZA CONTINUA","#2BA94E","#fff",9);
+  return W(o)},
+126(){ // mantenimiento general
+  let o=floorT("#D6D0C6")+bldg(-20,40,440,80,"#E9E1D5");
+  o+=`<rect x="140" y="60" width="0" height="40" fill="#7FB3D5"><animate attributeName="width" values="0;120" dur="6s" repeatCount="indefinite"/></rect><rect x="140" y="60" width="120" height="40" fill="none" stroke="#6C7783" stroke-dasharray="4 3"/>`;
+  o+=`<path d="M190,130 L210,220 M230,130 L210,220 M196,155 L224,155 M200,180 L220,180" stroke="#9AA6B2" stroke-width="4"/>`+bobAt(210,128,person(0,0,"#F2A900"),3,1.2);
+  o+=icon("tools",90,200,1)+cone(290,200)+cone(130,240)+pill(320,250,"MANTENIMIENTO","#1A1D21","#F2A900",9);
+  return W(o)},
+127(){ // instalaciones eléctricas
+  let o=floorT("#D9DDE1");
+  [60,140,220].forEach((x,i)=>o+=`<rect x="${x}" y="60" width="60" height="100" rx="4" fill="#5A6470" stroke="#3A4552" stroke-width="2"/>`+[0,1,2,3].map(k=>`<circle cx="${x+15+(k%2)*30}" cy="${80+Math.floor(k/2)*22}" r="4" fill="${k===i?"#FF3B3B":"#57E89A"}" class="lt" style="animation-delay:${(k*.3+i*.2).toFixed(1)}s"/>`).join("")+bolt(x+30,138,.7));
+  o+=flow("M90,160 L90,220 L380,220","#F2C200",4,"8 6",.4)+flow("M170,160 L170,220","#F2C200",4,"8 6",.4)+flow("M250,160 L250,220","#F2C200",4,"8 6",.4);
+  o+=person(320,120,"#F2A900")+pill(330,80,"BAJA / MEDIA TENSIÓN","#1A1D21","#F2C200",8);
+  return W(o)},
+128(){ // mantenimiento hidráulico
+  let o=floorT("#D9DDE1")+tankTop(80,110,46,"#BDE7FF");
+  o+=flow("M126,110 L220,110 L220,200 L380,200","#2B8CFF",8,"10 8",.6)+flow("M220,110 L380,110","#2B8CFF",8,"10 8",.6);
+  o+=fanAt(220,150,14,.5,"#7AD3FF")+`<circle cx="300" cy="110" r="9" fill="#C4122F"/><rect x="296" y="96" width="8" height="8" fill="#C4122F"/>`;
+  o+=dropI(330,236,.8)+person(270,240,"#F2A900")+pill(110,200,"BOMBEO","#1A1D21","#7AD3FF");
+  return W(o)},
+129(){ // sistemas contra incendios
+  let o=floorT("#E2DDD3")+room();
+  [80,200,320].forEach((x,i)=>o+=`<circle cx="${x}" cy="90" r="7" fill="#C4122F"/>`+parts(x,96,"#7AD3FF",10,70,90,1.3,2.5));
+  o+=`<rect x="20" y="170" width="70" height="60" rx="5" fill="#C4122F"/><rect x="28" y="178" width="54" height="16" fill="#0E141A"/>${txt(55,190,"ALARMA","#FF3B3B",8)}<circle cx="55" cy="212" r="8" fill="#FF3B3B" class="lt" style="animation-duration:.7s"/>`;
+  o+=`<rect x="340" y="180" width="20" height="44" rx="6" fill="#C4122F"/><rect x="346" y="172" width="8" height="10" fill="#1A1D21"/>`+pill(200,250,"PCI · ROCIADORES","#C4122F","#fff",9);
+  return W(o)},
+130(){ // manejo de residuos internacionales
+  let o=apronP()+parkedP(320,90,1.8,180);
+  o+=`<rect x="40" y="150" width="140" height="80" rx="4" fill="#8A97A4"/>${txt(110,196,"ACOPIO","#fff",11)}<rect x="150" y="80" width="24" height="70" fill="#5A6470"/>`;
+  [0,1,2].map(i=>o+=`<circle cx="162" cy="78" r="10" fill="#9AA0A7" opacity=".6"><animate attributeName="r" values="6;20" dur="2.4s" begin="${i*.8}s" repeatCount="indefinite"/><animate attributeName="cy" values="78;30" dur="2.4s" begin="${i*.8}s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="2.4s" begin="${i*.8}s" repeatCount="indefinite"/></circle>`);
+  o+=mv(`${veh("tank","#C4122F")}`,"M420,140 L300,150 L200,190",8)+pill(300,240,"RESIDUOS INTERNACIONALES","#C4122F","#fff",8);
+  return W(o)},
+131(){ // tratamiento de aguas residuales
+  let o=grass()+[[110,110],[290,110]].map(([x,y])=>tankTop(x,y,52,"#6CA6C6")+spinAt(x,y,`<line x1="-48" y1="0" x2="48" y2="0" stroke="#1A1D21" stroke-width="4"/><circle r="6" fill="#1A1D21"/>`,7)).join("");
+  o+=`<rect x="120" y="190" width="160" height="50" rx="6" fill="#5B7A5A"/>`+fanAt(160,215,12,1)+fanAt(240,215,12,1);
+  o+=flow("M-20,110 L58,110","#A16207",4,"7 6",.6)+flow("M162,110 L238,110","#7AD3FF",4,"7 6",.6)+flow("M342,110 L420,110","#2B8CFF",4,"7 6",.6);
+  return W(o)},
+132(){ // suministro de agua
+  let o=grass()+tankTop(90,150,58,"#BDE7FF")+dropI(90,150,1.3);
+  o+=`<rect x="240" y="60" width="160" height="180" fill="#E9E1D5"/>${txt(320,160,"TERMINAL","#6C7783",11)}`;
+  o+=flow("M148,150 L240,150","#2B8CFF",8,"10 8",.6)+flow("M200,150 L200,250 L420,250","#2B8CFF",5,"8 6",.6)+meter(30,70,60,"#2B8CFF","0.7;0.9;0.7",5)+pill(90,240,"AGUA POTABLE","#1A1D21","#7AD3FF");
+  return W(o)},
+133(){ // suministro de energía eléctrica
+  let o=`<rect x="-20" y="-20" width="440" height="340" fill="#B7AE9A"/>`+fence(20,40,380,40)+fence(20,260,380,260)+fence(20,40,20,260)+fence(380,40,380,260);
+  [[90,100],[170,100],[250,100]].forEach(([x,y])=>o+=`<rect x="${x-26}" y="${y-26}" width="52" height="52" rx="4" fill="#6C7783" stroke="#3A4552" stroke-width="2"/>${[0,1,2].map(k=>`<circle cx="${x-12+k*12}" cy="${y-30}" r="4" fill="#C2410C"/>`).join("")}`);
+  o+=`<rect x="290" y="70" width="70" height="60" rx="5" fill="#2BA94E"/>${txt(325,104,"PLANTA","#fff",9)}`+fanAt(325,180,16,.3)+bolt(170,190,1.3);
+  o+=flow("M90,126 L90,220 L380,220","#F2C200",4,"8 6",.35)+flow("M250,126 L250,220","#F2C200",4,"8 6",.35);
+  return W(o)},
+134(){ // climatización
+  let o=`<rect x="-20" y="-20" width="440" height="340" fill="#9AA0A7"/>`+joints("#9AA0A7");
+  [[90,100],[200,100],[310,100],[145,200],[255,200]].forEach(([x,y],i)=>o+=`<rect x="${x-36}" y="${y-36}" width="72" height="72" rx="6" fill="#D6DEE6" stroke="#6C7783" stroke-width="2"/>`+fanAt(x,y,22,.5+i*.1));
+  o+=flow("M-20,260 L420,260","#7AD3FF",6,"12 8",.6)+pill(350,250,"HVAC","#1A1D21","#7AD3FF");
+  return W(o)},
+135(){ // elevadores
+  let o=`<rect x="-20" y="-20" width="440" height="340" fill="#D6D0C6"/>`;
+  [120,200,280].forEach((x,i)=>{o+=`<rect x="${x-30}" y="30" width="60" height="240" fill="#3A3F45"/><line x1="${x}" y1="30" x2="${x}" y2="270" stroke="#9AA6B2"/>`;o+=`<g><rect x="${x-24}" y="-28" width="48" height="56" rx="4" fill="#E9EEF2" stroke="#9AA6B2" stroke-width="2"/>${person(x,-6,"#FFD166")}<animateTransform attributeName="transform" type="translate" values="0,${70+i*40};0,${230-i*30};0,${70+i*40}" dur="${6+i}s" repeatCount="indefinite"/></g>`});
+  [80,150,220].forEach(y=>o+=`<line x1="20" y1="${y}" x2="380" y2="${y}" stroke="#B9B0A2" stroke-width="2" stroke-dasharray="6 6"/>`);
+  o+=pill(355,60,"ELEVADORES","#1A1D21","#F2C200",8);
+  return W(o)},
+136(){ // escaleras eléctricas
+  let o=floorT("#E2DDD3");
+  [130,270].forEach((x,i)=>{o+=`<rect x="${x-34}" y="30" width="68" height="240" rx="8" fill="#5A6470"/><rect x="${x-26}" y="38" width="52" height="224" fill="#3A3F45"/>`;o+=`<line x1="${x}" y1="38" x2="${x}" y2="262" stroke="#9AA6B2" stroke-width="48" stroke-dasharray="3 9"><animate attributeName="stroke-dashoffset" values="${i?0:12};${i?12:0}" dur=".6s" repeatCount="indefinite"/></line>`;o+=crowd(i?`M${x},30 L${x},270`:`M${x},270 L${x},30`,3,6)});
+  o+=pill(200,150,"SUBE ↑  ·  BAJA ↓","#1A1D21","#F2C200",8);
+  return W(o)},
+137(){ // baños
+  let o=floorT("#E6EEF0")+room("#E6EEF0");
+  for(let k=0;k<5;k++)o+=`<rect x="${40+k*64}" y="54" width="54" height="60" rx="4" fill="#fff" stroke="#9AA6B2" stroke-width="2"/><ellipse cx="${67+k*64}" cy="88" rx="11" ry="14" fill="#E9EEF2" stroke="#9AA6B2"/>`;
+  o+=icon("wc",200,170,1.2)+mv(`${veh("cart","#2BA94E")}`,"M-40,230 L440,230",10)+parts(320,230,"#BDE7FF",5,20,-90,1.2,2)+pill(90,170,"SANITIZACIÓN","#2BA94E","#fff",9);
+  return W(o)},
+138(){ // mantenimiento de áreas comunes
+  let o=floorT("#E7E1D6")+room()+`<rect x="40" y="70" width="60" height="40" rx="4" fill="#2BA94E" opacity=".3"/>`+seats(140,80,8,2);
+  o+=mv(veh("scrub","#2B8CFF"),"M-40,200 L440,200",10)+bobAt(330,100,person(0,0,"#F2A900"),3,1.2)+icon("tools",360,150,.7)+crowd("M-20,250 L420,250",3,14);
+  return W(o)},
+139(){return W(mall("plate","RESTAURANTE","#C2410C"))},
+140(){return W(mall("cup","CAFETERÍA","#6B4630",[0,1,2].map(i=>`<path d="M${192+i*7},76 q-6,-8 0,-16 q6,-8 0,-16" fill="none" stroke="#9AA6B2" stroke-width="2.5" opacity="0"><animate attributeName="opacity" values="0;.8;0" dur="2s" begin="${i*.6}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0,6;0,-6" dur="2s" begin="${i*.6}s" repeatCount="indefinite"/></path>`).join("")))},
+141(){return W(mall("glass","BAR","#8A3F6E"))},
+142(){return W(mall("bag","TIENDA","#2BA94E"))},
+143(){return W(mall("basket","CONVENIENCIA","#F2A900"))},
+144(){return W(mall("gift","DUTY FREE","#8A3F6E",pill(200,180,"INTERNACIONAL","#1A1D21","#F2C200",8)))},
+145(){return W(mall("coin","CAMBIO","#2BA94E",`<g transform="translate(330,92)">${txt(0,0,"USD 18.05","#14532D",10)}${txt(0,16,"EUR 19.62","#14532D",10)}</g>`))},
+146(){return W(mall("bank","BANCO","#2B5D8A"))},
+147(){return W(mall("atm","CAJERO","#2B5D8A"))},
+148(){return W(mall("pharm","FARMACIA","#2BA94E"))},
+149(){let o=`<rect x="-20" y="-20" width="440" height="340" fill="#565D65"/>`+stalls(30,140,12,28,60);
+  [44,100,184,268,324].forEach((x,i)=>o+=`<g transform="translate(${x},170) rotate(-90)">${car(BAGC[i%6])}</g>`);
+  o+=`<rect x="20" y="30" width="360" height="80" rx="6" fill="#E9E1D5"/>`+counter(60,70,100)+icon("key",250,70,1)+icon("carI",330,70,.9);
+  o+=`<g>${car("#2BA94E")}<animateMotion dur="8s" repeatCount="indefinite" rotate="auto" path="M156,200 L156,250 L440,250"/></g>`;
+  return W(o)},
+150(){let o=floorT("#D6D0C6")+bldg(80,30,240,160,"#E9E1D5");
+  for(let r=0;r<4;r++)for(let k=0;k<8;k++)o+=`<rect x="${96+k*28}" y="${44+r*34}" width="18" height="20" fill="#7FB3D5" class="${(k+r)%3?"":"lt"}" style="animation-duration:${3+(k%3)}s"/>`;
+  o+=txt(200,206,"HOTEL","#6C7783",14)+icon("bed",360,110,.9)+`<rect x="-20" y="220" width="440" height="40" fill="#4A5057"/>`+mv(veh("bus","#2B5D8A"),"M-60,240 L460,240",9);
+  return W(o)},
+151(){return W(mall("globe","AGENCIA DE VIAJES","#2B8CFF",spinAt(200,98,`<ellipse rx="34" ry="10" fill="none" stroke="#2B8CFF" stroke-width="1.5" stroke-dasharray="4 4"/>`,5)))},
+152(){let o=floorT("#E7E1D6")+room();
+  [[40,60,140,80],[220,60,140,80]].forEach(([x,y,w,h],i)=>o+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="5" fill="#1A1D21"/><rect x="${x+6}" y="${y+6}" width="${w-12}" height="${h-12}" fill="#E0457B"><animate attributeName="fill" values="${i?"#2B8CFF;#F2A900;#2BA94E;#2B8CFF":"#E0457B;#2BA94E;#2B8CFF;#E0457B"}" dur="5s" repeatCount="indefinite"/></rect>`+txt(x+w/2,y+h/2+5,i?"VUELA MÁS":"¡OFERTA!","#fff",14));
+  o+=`<rect x="160" y="170" width="80" height="60" rx="4" fill="#F2C200"/>`+txt(200,206,"ANUNCIO","#1A1D21",10)+crowd("M-20,250 L420,250",4,12);
+  return W(o)},
+153(){return W(mall("vase","ARTESANÍAS","#C2410C"))},
+154(){return W(mall("burger","ALIMENTOS","#F2A900"))},
+155(){let o=floorT("#E7E1D6")+room();
+  [100,200,300].forEach((x,i)=>o+=icon("vend",x,120,1.6));
+  o+=stream("M200,140 L200,160",1,1.6,()=>`<rect x="-5" y="-4" width="10" height="8" fill="#2BA94E"/>`)+crowd("M-20,230 L420,230",3,12)+person(200,190,"#FFD166");
+  return W(o)},
+156(){let o=floorT("#E7E1D6")+room()+seats(30,170,8,2)+seats(260,170,8,2,"#7FA1BF");
+  o+=`<rect x="186" y="70" width="28" height="28" rx="6" fill="#1A1D21"/>`+[0,1,2].map(i=>ring(200,84,"#2B8CFF",14,90,i*.9,2.7)).join("")+icon("wifi",200,140,1.2);
+  o+=[[60,181],[290,181],[100,203]].map(([x,y])=>`<rect x="${x-4}" y="${y-6}" width="8" height="12" rx="1.5" fill="#1A1D21"/><rect x="${x-3}" y="${y-5}" width="6" height="8" fill="#7AD3FF" class="glow"/>`).join("");
+  return W(o)},
+157(){let o=floorT("#E2DDD3");
+  [[30,50],[150,50],[270,50],[30,160],[150,160],[270,160]].forEach(([x,y],i)=>o+=`<rect x="${x}" y="${y}" width="100" height="90" fill="#F4F0EA" stroke="#B9B0A2" stroke-width="2"/><rect x="${x+20}" y="${y+30}" width="60" height="22" rx="3" fill="#8B6B4A"/>`+person(x+50,y+66,["#2B5D8A","#2BA94E","#8A3F6E"][i%3])+`<rect x="${x+38}" y="${y+33}" width="22" height="14" fill="#1A1D21"/><rect x="${x+40}" y="${y+35}" width="18" height="10" fill="#7AD3FF" class="glow" style="animation-delay:${i*.3}s"/>`);
+  o+=icon("brief",200,30,.7);
+  return W(o)}
+});
 const ilus = s=>(ILUS[s.numero]||ILUS.fallback)(s);
 const hasImg = s=>!ILUS[s.numero]&&!!s.imagen;
 const thumb = s=>hasImg(s)?`<img src="${esc(s.imagen)}" alt="" loading="lazy" decoding="async"><span class="ibadge"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"3\"/><circle cx=\"9\" cy=\"10\" r=\"2\"/><path d=\"M21 16l-5-5-8 9\"/></svg>Infografía</span>`:ilus(s);
@@ -894,6 +1715,9 @@ const STEPS=[
   if(STEPS.length){const ob=new IntersectionObserver(es=>{if(es[0].isIntersecting&&cur<0){go(0)}},{threshold:.3});ob.observe(box)}
 })();
 
+/* SERVAE-LAZYANIM */
+const ANIM_IO=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(e=>{const sv=e.target.querySelector("svg");if(!sv)return;if(e.isIntersecting){sv.unpauseAnimations&&!RM&&sv.unpauseAnimations();e.target.classList.remove("anim-off")}else{sv.pauseAnimations&&sv.pauseAnimations();e.target.classList.add("anim-off")}}),{rootMargin:"200px"}):null;
+function lazyAnim(root){if(!ANIM_IO)return;root.querySelectorAll(".thumb").forEach(t=>ANIM_IO.observe(t))}
 /* =================== Catálogo =================== */
 const st={q:"",cat:"",sub:"",lado:""};
 const uniq=a=>[...new Set(a)].sort((x,y)=>x.localeCompare(y,"es"));
@@ -919,7 +1743,7 @@ function renderCatalog(){
     <div class="meta"><div><b>${esc(G(s))}</b><span>${esc(s.subcategoria)}</span></div>${chip(s.ubicacion.lado)}</div></div></button>`).join("")
    :`<div class="empty"><b>Ningún servicio coincide${st.q?` con “${esc(st.q)}”`:""}.</b><p>Prueba con otro término, por ejemplo “rodaje” o “taxiway”, o quita algún filtro.</p><button class="clear" id="clr2" style="margin-top:10px">Limpiar filtros</button></div>`;
   g.querySelectorAll(".card").forEach(c=>{tilt(c,5);c.addEventListener("click",()=>openModal(c.dataset.id))});
-  observe(g);
+  observe(g);lazyAnim(g);
   if(RM)g.querySelectorAll("svg").forEach(s=>s.pauseAnimations&&s.pauseAnimations());
 }
 const clearAll=()=>{st.q=st.cat=st.sub=st.lado="";$("#q").value="";renderCatalog()};
