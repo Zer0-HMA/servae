@@ -21,7 +21,7 @@
 <meta name="twitter:title" content="SERVAE · Servicios e Infraestructura Aeroportuaria">
 <meta name="twitter:description" content="Guía didáctica de servicios e infraestructura aeroportuaria. Proyecto académico Cuervos UTVT.">
 <meta name="twitter:image" content="https://zer0-hma.github.io/servae/preview.jpg">
-<link rel="preload" href="servicios.json" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="servicios.json?v=202610251607" as="fetch" crossorigin="anonymous">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,700;1,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -383,7 +383,7 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
       <div class="hero-main"><div class="lockup"><span class="coin"></span><span class="wm" role="img" aria-label="UTVT"></span><span class="lk-t">Universidad Tecnológica<br>del Valle de Toluca</span></div>
       <h1 id="h1">Servicios e infraestructura aeroportuaria</h1></div>
       <div class="hero-side">
-        <span class="glass-chip"><b id="hcount">4</b> de 160 fichas técnicas publicadas</span>
+        <span class="glass-chip"><b id="hcount">153</b> de 160 fichas técnicas publicadas</span>
         <p class="justify">Recorremos el aeropuerto desde la pista hasta la terminal: qué es cada servicio, dónde ocurre, quién lo presta, con qué equipos y bajo qué normativa de OACI, AFAC y FAA.</p>
         <a class="down" href="#destacadas" aria-label="Ir a fichas destacadas"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 4v16M5 13l7 7 7-7"/></svg></a>
       </div>
@@ -480,7 +480,7 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
 "use strict";
 let DATA;
 try{
-  const r = await fetch("servicios.json",{cache:"no-cache"});
+  const r = await fetch("servicios.json?v=202610251607",{cache:"no-cache"});
   if(!r.ok) throw new Error("HTTP " + r.status);
   DATA = await r.json();
 }catch(e){
@@ -589,7 +589,7 @@ function tilt(el,max=7){
 const CG='<svg class="cg" viewBox="-37 -28 72 56" aria-hidden="true"><path fill="currentColor" d="M7,-2 C1,-15 -12,-25 -27,-27 C-20,-16 -13,-7 1,-2 Z M7,2 C1,15 -12,25 -27,27 C-20,16 -13,7 1,2 Z M-20,0 L-36,-7 L-29,-2 L-32,0 L-29,2 L-36,7 Z M-22,0 C-14,-2.6 -2,-3 9,-2.6 C15,-2.2 19,-1.3 22,0 C19,1.3 15,2.2 9,2.6 C-2,3 -14,2.6 -22,0 Z M25,-1.1 L33,0 L25,1.1 Z"/><circle fill="currentColor" cx="22" cy="0" r="3.4"/></svg>';
 (function(){const fill=(sel,items)=>{const html=items.map(t=>`<span>${t}${CG}</span>`).join("");$(sel).innerHTML=html+html};
 fill("#marq",["Pista 15/33","Calle de rodaje A","Plataforma comercial","Puesto 12","Señalamiento horizontal","Iluminación de pista","VDGS","Salvamento y extinción de incendios","Terminal de pasajeros","Terminal de carga"]);
-fill("#marq2",["Cuervos UTVT","Lado aire","Lado tierra","OACI","AFAC","FAA","Cuervos UTVT","160 fichas técnicas","SERVAE"]);})();
+fill("#marq2",["Cuervos UTVT","Lado aire","Lado tierra","OACI","AFAC","FAA","Cuervos UTVT",`${DATA.length} fichas técnicas`,"SERVAE"]);})();
 
 /* =================== Bento destacadas =================== */
 (function(){
@@ -599,7 +599,7 @@ fill("#marq2",["Cuervos UTVT","Lado aire","Lado tierra","OACI","AFAC","FAA","Cue
     <div class="glass"><div class="t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>${esc(T(s))}</div>
     <div class="more"><div><p>${esc(s.nombreIngles)}. ${esc(s.subcategoria)}, ${(LADOS[s.ubicacion.lado]||LADOS.aire).l.toLowerCase()}.</p></div></div></div></button>`;
   const f=DATA.slice(0,4);
-  $("#bento").innerHTML=`<div class="col">${f[0]?tile(f[0],0):""}${f[2]?tile(f[2],2):""}</div><div class="col">${f[1]?tile(f[1],1):""}<a class="pill pill-line explore" href="#catalogo" data-reveal style="--d:.3s">Explorar catálogo ↗</a>${f[3]?tile(f[3],3):""}</div>`;
+  $("#bento").innerHTML=`<div class="col">${f[0]?tile(f[0],0):""}${f[2]?tile(f[2],2):""}</div><div class="col">${f[1]?tile(f[1],1):""}<a class="pill pill-line explore" href="#catalogo" data-reveal style="--d:.3s">Ver las ${DATA.length} fichas ↗</a>${f[3]?tile(f[3],3):""}</div>`;
   $("#bento").querySelectorAll(".tile").forEach(t=>{tilt(t,6);t.addEventListener("click",()=>openModal(t.dataset.id))});
 })();
 
