@@ -264,6 +264,15 @@ footer h4{color:#fff;margin:0 0 10px;font-size:15px}
 .eq{columns:2;column-gap:32px;margin:8px 0 0;padding:0;list-style:none}
 .eq li{break-inside:avoid;padding-left:22px;position:relative;margin:7px 0}
 .eq li::before{content:"";position:absolute;left:3px;top:.62em;width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 22%,transparent)}
+.card .thumb img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.card:hover .thumb img{transform:scale(1.06)}
+.seqh{margin:10px 0 4px;color:var(--muted);font-weight:700;font-size:14.5px}
+.seqv{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px;counter-reset:sq}
+.seqv li{counter-increment:sq;display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 8px;border-radius:999px;background:var(--cream-2);border:1px solid var(--line);font-size:14.5px;font-weight:600}
+.seqv li::before{content:counter(sq);width:22px;height:22px;border-radius:50%;background:var(--teal);color:#04210F;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none}
+.figv{margin:16px 0 0}
+.figv img{width:100%;height:auto;max-width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+.figv figcaption{margin-top:8px;color:var(--muted);font-size:13.5px}
 .note{padding:20px 32px;background:var(--cream-2);color:var(--muted);font-size:14px}
 @media (max-width:700px){.overlay{padding:0}.sheet{border-radius:0;min-height:100%}.row{grid-template-columns:1fr;gap:2px}.eq{columns:1}.sec,.note{padding-left:20px;padding-right:20px}.sheet .btext{padding:20px}}
 
@@ -431,13 +440,13 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
     <div class="wrap">
       <div class="head">
         <h2 data-reveal>Catálogo<br>completo</h2>
-        <p class="justify" data-reveal style="--d:.15s">Busca por nombre en español o inglés, o por equipo. Filtra por categoría, subcategoría y por lado aire o lado tierra. Abre cualquier ficha para ver sus siete apartados.</p>
+        <p class="justify" data-reveal style="--d:.15s">Busca por nombre en español o inglés, o por equipo. Filtra por grupo, subcategoría y por lado aire o lado tierra. Abre cualquier ficha para ver todos sus apartados.</p>
       </div>
       <div class="filters">
         <label class="search"><span class="sr-only">Buscar servicio</span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
           <input class="field" id="q" type="search" placeholder="Buscar: pista, taxiway, VDGS…" autocomplete="off"></label>
-        <label><span class="sr-only">Categoría</span><select class="field" id="cat"></select></label>
+        <label><span class="sr-only">Grupo</span><select class="field" id="cat"></select></label>
         <label><span class="sr-only">Subcategoría</span><select class="field" id="sub"></select></label>
       </div>
       <div class="bar2">
@@ -458,7 +467,7 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
       <p class="txt"><b>Proyecto académico Cuervos UTVT.</b> Material didáctico sobre servicios e infraestructura aeroportuaria; no sustituye la normativa vigente. <span class="upd">Última actualización: octubre de 2026.</span></p>
     </div>
     <div class="cols">
-      <div><h4><span class="u">Fuentes</span></h4><p class="justify">OACI: Anexo 14 (Vol. I y II), Anexo 11, Doc 4444, Doc 9157, Doc 9137, Doc 9184, Doc 9476. FAA: circulares de la serie 150 como referencia técnica complementaria; no sustituyen la normativa mexicana. México: Ley de Aeropuertos, su Reglamento y disposiciones vigentes de AFAC.</p></div>
+      <div><h4><span class="u">Fuentes</span></h4><p class="justify">OACI: Anexos 9, 11, 14 (Vol. I y II), 17, 18 y 19; Doc 4444, Doc 9157, Doc 9137, Doc 9184, Doc 9476, Doc 9977. IATA: AHM, IGOM y DGR como referencias de operaciones en tierra. FAA: circulares de la serie 150 como referencia técnica complementaria; no sustituyen la normativa mexicana. México: Ley de Aeropuertos, Ley de Aviación Civil, sus reglamentos, disposiciones vigentes de AFAC y NOM aplicables.</p></div>
       <div><h4><span class="u">Nota académica</span></h4><p class="justify">Las fichas describen funciones y prácticas generales. Las categorías son funcionales y didácticas, no una clasificación legal universal. Verifica siempre la edición vigente de cada disposición.</p></div>
     </div>
   </div>
@@ -481,6 +490,7 @@ try{
   if(main) main.insertAdjacentHTML("afterbegin",'<p role="alert" style="padding:2rem;text-align:center">No se pudo cargar la información de los servicios. Recarga la página en un momento.</p>');
   return;
 }
+const GRUPOS = [...new Set(DATA.map(s=>s.grupo||s.categoria))];
 const RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (s,r=document)=>r.querySelector(s);
 const pad = n=>String(n).padStart(2,"0");
@@ -489,6 +499,8 @@ const esc = s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;
 const LADOS = {aire:{l:"Lado aire",c:"chip-aire"},tierra:{l:"Lado tierra",c:"chip-tierra"},mixto:{l:"Aire y tierra",c:"chip-mixto"}};
 const chip = l=>`<span class="chip ${(LADOS[l]||LADOS.aire).c}">${(LADOS[l]||LADOS.aire).l}</span>`;
 const byId = id=>DATA.find(s=>s.id===id);
+const T = s=>s.titulo||s.nombreTecnico;
+const G = s=>s.grupo||s.categoria;
 
 /* =================== Ilustraciones SVG animadas =================== */
 const PLANE = "M20,0 C20,2 17,3 12,3 L4,3 L-6,22 L-9,22 L-4,3 L-13,3 L-18,9 L-20,9 L-18,0 L-20,-9 L-18,-9 L-13,-3 L-4,-3 L-9,-22 L-6,-22 L4,-3 L12,-3 C17,-3 20,-2 20,0Z";
@@ -549,9 +561,10 @@ const ILUS = {
   o+=`<g>${plane(3.3)}<animateMotion dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;.64;1" calcMode="linear" path="M200,400 L200,152"/></g>`;
   return wrapSvg(o);
 },
-fallback(){return wrapSvg(`<rect x="-20" y="-20" width="440" height="340" fill="#2F7F95"/><circle cx="90" cy="80" r="60" fill="#fff" opacity=".15"/><circle cx="300" cy="230" r="80" fill="#fff" opacity=".12"/><g transform="translate(200,150) rotate(-35)">${plane(3)}</g>`)}
+fallback(s){const C=["#2F7F95","#3E7238","#B5651D","#5B4B8A","#A23B3B","#2B5D8A","#7A6A1F","#2E8A7A","#8A3F6E","#4A5560","#9A5B2E"];const c=C[(GRUPOS.indexOf(s?G(s):"")+11)%11];return wrapSvg(`<rect x="-20" y="-20" width="440" height="340" fill="${c}"/><circle cx="90" cy="80" r="60" fill="#fff" opacity=".15"/><circle cx="300" cy="230" r="80" fill="#fff" opacity=".12"/><g transform="translate(200,150) rotate(-35)">${plane(3)}</g>`)}
 };
-const ilus = s=>(ILUS[s.numero]||ILUS.fallback)();
+const ilus = s=>(ILUS[s.numero]||ILUS.fallback)(s);
+const thumb = s=>ILUS[s.numero]?ilus(s):(s.imagen?`<img src="${esc(s.imagen)}" alt="" loading="lazy" decoding="async">`:ilus(s));
 
 /* =================== Preloader + reveal =================== */
 function startLoader(done){
@@ -581,9 +594,9 @@ fill("#marq2",["Cuervos UTVT","Lado aire","Lado tierra","OACI","AFAC","FAA","Cue
 /* =================== Bento destacadas =================== */
 (function(){
   const sizes=["h-l","h-m","h-m","h-l"];
-  const tile=(s,i)=>`<button class="tile ${sizes[i]}" data-id="${s.id}" data-reveal style="--d:${(i*.12).toFixed(2)}s" aria-label="Abrir ficha ${pad(s.numero)}: ${esc(s.nombreTecnico)}">
+  const tile=(s,i)=>`<button class="tile ${sizes[i]}" data-id="${s.id}" data-reveal style="--d:${(i*.12).toFixed(2)}s" aria-label="Abrir ficha ${pad(s.numero)}: ${esc(T(s))}">
     <div class="art">${ilus(s)}</div><div class="shade"></div><span class="num">${pad(s.numero)}</span>
-    <div class="glass"><div class="t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>${esc(s.nombreTecnico)}</div>
+    <div class="glass"><div class="t"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>${esc(T(s))}</div>
     <div class="more"><div><p>${esc(s.nombreIngles)}. ${esc(s.subcategoria)}, ${(LADOS[s.ubicacion.lado]||LADOS.aire).l.toLowerCase()}.</p></div></div></div></button>`;
   const f=DATA.slice(0,4);
   $("#bento").innerHTML=`<div class="col">${f[0]?tile(f[0],0):""}${f[2]?tile(f[2],2):""}</div><div class="col">${f[1]?tile(f[1],1):""}<a class="pill pill-line explore" href="#catalogo" data-reveal style="--d:.3s">Explorar catálogo ↗</a>${f[3]?tile(f[3],3):""}</div>`;
@@ -602,7 +615,7 @@ const STEPS=[
   STEPS.forEach((st,i)=>{const s=DATA.find(d=>d.numero===st.n);
     const sc=document.createElement("div");sc.className="scene";sc.innerHTML=ilus(s);scenes.insertBefore(sc,scenes.firstChild);st.el=sc;
     const b=document.createElement("button");b.className="step";b.setAttribute("data-reveal","");b.style.setProperty("--d",(i*.1)+"s");b.style.setProperty("--dur",DUR+"ms");
-    b.innerHTML=`<div class="top"><span class="n">${st.n}</span>${st.t}</div><div class="body"><div><p class="justify">${st.p}</p><span class="lnk" data-open="${s.id}">Abrir ficha ${pad(s.numero)}: ${esc(s.nombreTecnico)}</span></div></div><span class="prog"></span>`;
+    b.innerHTML=`<div class="top"><span class="n">${st.n}</span>${st.t}</div><div class="body"><div><p class="justify">${st.p}</p><span class="lnk" data-open="${s.id}">Abrir ficha ${pad(s.numero)}: ${esc(T(s))}</span></div></div><span class="prog"></span>`;
     b.addEventListener("click",e=>{if(e.target.closest("[data-open]")){openModal(s.id);return}go(i,true)});
     box.appendChild(b);st.btn=b});
   let cur=-1,timer=null,playing=!RM;
@@ -623,15 +636,15 @@ const STEPS=[
 /* =================== Catálogo =================== */
 const st={q:"",cat:"",sub:"",lado:""};
 const uniq=a=>[...new Set(a)].sort((x,y)=>x.localeCompare(y,"es"));
-const IDX=DATA.map(s=>({s,t:norm([s.nombreTecnico,s.nombreIngles,s.categoria,s.subcategoria,s.descripcion.queEs,s.descripcion.paraQueSirve,s.equipos.join(" ")].join(" "))}));
+const IDX=DATA.map(s=>({s,t:norm([s.titulo||"",s.nombreTecnico,s.nombreIngles,s.grupo||"",s.categoria,s.subcategoria,s.descripcion.queEs,s.descripcion.paraQueSirve,s.equipos.join(" ")].join(" "))}));
 function fillSelect(el,label,opts,val){el.innerHTML=`<option value="">${label}</option>`+opts.map(o=>`<option${o===val?" selected":""}>${esc(o)}</option>`).join("")}
 function renderCatalog(){
-  const cats=uniq(DATA.map(s=>s.categoria));
-  const subs=uniq(DATA.filter(s=>!st.cat||s.categoria===st.cat).map(s=>s.subcategoria));
+  const cats=uniq(DATA.map(G));
+  const subs=uniq(DATA.filter(s=>!st.cat||G(s)===st.cat).map(s=>s.subcategoria));
   if(st.sub&&!subs.includes(st.sub))st.sub="";
-  fillSelect($("#cat"),"Todas las categorías",cats,st.cat);fillSelect($("#sub"),"Todas las subcategorías",subs,st.sub);
+  fillSelect($("#cat"),"Todos los grupos",cats,st.cat);fillSelect($("#sub"),"Todas las subcategorías",subs,st.sub);
   const terms=norm(st.q).split(/\s+/).filter(Boolean);
-  const base=IDX.filter(({s,t})=>(!st.cat||s.categoria===st.cat)&&(!st.sub||s.subcategoria===st.sub)&&terms.every(w=>t.includes(w)));
+  const base=IDX.filter(({s,t})=>(!st.cat||G(s)===st.cat)&&(!st.sub||s.subcategoria===st.sub)&&terms.every(w=>t.includes(w)));
   const lc=base.reduce((a,{s})=>(a[s.ubicacion.lado]=(a[s.ubicacion.lado]||0)+1,a),{});
   const res=base.filter(({s})=>!st.lado||s.ubicacion.lado===st.lado).map(x=>x.s);
   $("#lado").innerHTML=`<button aria-pressed="${!st.lado}" data-l="">Todos</button>`+Object.entries(LADOS).map(([k,v])=>`<button data-l="${k}" aria-pressed="${st.lado===k}" ${!lc[k]&&st.lado!==k?"disabled":""}>${v.l} <span style="opacity:.6">${lc[k]||0}</span></button>`).join("");
@@ -639,10 +652,10 @@ function renderCatalog(){
   $("#count").innerHTML=`<b>${res.length}</b> de ${DATA.length} servicios${active?'<button class="clear" id="clr">Limpiar filtros</button>':""}`;
   window.__results=res;
   const g=$("#grid");
-  g.innerHTML=res.length?res.map((s,i)=>`<button class="card" data-id="${s.id}" data-reveal style="--d:${(i%3*.08).toFixed(2)}s" aria-label="Abrir ficha ${pad(s.numero)}: ${esc(s.nombreTecnico)}">
-    <div class="thumb">${ilus(s)}<span class="num">${pad(s.numero)}</span></div>
-    <div class="cb"><h3>${esc(s.nombreTecnico)}</h3><div class="en">${esc(s.nombreIngles)}</div><p class="q justify">${esc(s.descripcion.queEs)}</p>
-    <div class="meta"><div><b>${esc(s.categoria)}</b><span>${esc(s.subcategoria)}</span></div>${chip(s.ubicacion.lado)}</div></div></button>`).join("")
+  g.innerHTML=res.length?res.map((s,i)=>`<button class="card" data-id="${s.id}" data-reveal style="--d:${(i%3*.08).toFixed(2)}s" aria-label="Abrir ficha ${pad(s.numero)}: ${esc(T(s))}">
+    <div class="thumb">${thumb(s)}<span class="num">${pad(s.numero)}</span></div>
+    <div class="cb"><h3>${esc(T(s))}</h3><div class="en">${esc(s.nombreIngles)}</div><p class="q justify">${esc(s.descripcion.queEs)}</p>
+    <div class="meta"><div><b>${esc(G(s))}</b><span>${esc(s.subcategoria)}</span></div>${chip(s.ubicacion.lado)}</div></div></button>`).join("")
    :`<div class="empty"><b>Ningún servicio coincide${st.q?` con “${esc(st.q)}”`:""}.</b><p>Prueba con otro término, por ejemplo “rodaje” o “taxiway”, o quita algún filtro.</p><button class="clear" id="clr2" style="margin-top:10px">Limpiar filtros</button></div>`;
   g.querySelectorAll(".card").forEach(c=>{tilt(c,5);c.addEventListener("click",()=>openModal(c.dataset.id))});
   observe(g);
@@ -657,19 +670,20 @@ document.addEventListener("click",e=>{if(e.target.id==="clr"||e.target.id==="clr
 
 /* =================== Modal ficha =================== */
 let modal=null,lastFocus=null;
-const row=(l,v)=>`<div class="row"><div class="l">${l}</div><div class="justify">${v}</div></div>`;
+const row=(l,v)=>v?`<div class="row"><div class="l">${l}</div><div class="justify">${v}</div></div>`:"";
 function sheetHTML(s,idx,len){
   return `<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mt">
    <div class="banner"><div class="art">${ilus(s)}</div><span class="num">FICHA ${pad(s.numero)}</span>
     <div class="tools"><button class="ib" data-a="prev" ${idx<=0?"disabled":""} aria-label="Ficha anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 5l-7 7 7 7"/></svg></button><button class="ib" data-a="next" ${idx>=len-1?"disabled":""} aria-label="Ficha siguiente"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 5l7 7-7 7"/></svg></button><button class="ib" data-a="close" aria-label="Cerrar ficha"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
-    <div class="btext"><h2 id="mt">${esc(s.nombreTecnico)}</h2><div class="en">${esc(s.nombreIngles)}</div><div style="margin-top:10px">${chip(s.ubicacion.lado)}</div></div></div>
-   <div class="sec"><h3><i>1</i>Ficha identificadora</h3>${row("Nombre técnico del servicio",esc(s.nombreTecnico))}${row("Nombre en inglés",esc(s.nombreIngles))}${row("Categoría",esc(s.categoria))}${row("Subcategoría",esc(s.subcategoria))}</div>
+    <div class="btext"><h2 id="mt">${esc(T(s))}</h2><div class="en">${esc(s.nombreIngles)}</div><div style="margin-top:10px">${chip(s.ubicacion.lado)}</div></div></div>
+   <div class="sec"><h3><i>1</i>Ficha identificadora</h3>${row("Nombre técnico del servicio",esc(s.nombreTecnico))}${row("Nombre en inglés",esc(s.nombreIngles))}${s.grupo?row("Grupo",esc(s.grupo)):""}${row("Categoría",esc(s.categoria))}${row("Subcategoría",esc(s.subcategoria))}</div>
    <div class="sec"><h3><i>2</i>Descripción</h3>${row("¿Qué es?",esc(s.descripcion.queEs))}${row("¿Para qué sirve?",esc(s.descripcion.paraQueSirve))}${s.descripcion.general?row("Descripción general",esc(s.descripcion.general)):""}</div>
    <div class="sec"><h3><i>3</i>Ubicación</h3>${row("Zona física (¿dónde ocurre?)",esc(s.ubicacion.zonaFisica))}${row("¿Lado aire o lado tierra?",chip(s.ubicacion.lado)+(s.ubicacion.ladoDetalle&&s.ubicacion.ladoDetalle!==(LADOS[s.ubicacion.lado]||{}).l+"."?" "+esc(s.ubicacion.ladoDetalle):""))}</div>
    <div class="sec"><h3><i>4</i>Responsable del servicio</h3>${row("¿Quién lo presta?",esc(s.responsable.quienLoPresta))}${row("Ejemplos",esc(s.responsable.ejemplos))}</div>
    <div class="sec"><h3><i>5</i>Equipos y elementos involucrados</h3><ul class="eq">${s.equipos.map(e=>`<li>${esc(e)}</li>`).join("")}</ul></div>
-   <div class="sec"><h3><i>6</i>Normativa aplicable</h3>${s.normativa.map(n=>row(esc(n.ambito),esc(n.texto))).join("")}</div>
+   <div class="sec"><h3><i>6</i>Normativa aplicable</h3>${s.normativa.map(n=>row(esc(n.ambito),esc(n.texto))).join("")}${s.fuente?row("Fuente de la información",esc(s.fuente)):""}</div>
    <div class="sec"><h3><i>7</i>Momento operativo</h3><p class="justify" style="margin-top:8px">${esc(s.momentoOperativo)}</p></div>
+   ${(s.secuencia&&s.secuencia.length)||s.imagen?`<div class="sec"><h3><i>8</i>Recursos visuales</h3>${s.secuencia&&s.secuencia.length?`<p class="seqh">Secuencia operativa</p><ol class="seqv">${s.secuencia.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>`:""}${s.imagen?`<figure class="figv"><a href="${esc(s.imagen)}" target="_blank" rel="noopener"><img src="${esc(s.imagen)}" alt="Infografía de ${esc(T(s))}" loading="lazy" decoding="async"></a><figcaption>Infografía de la ficha. Toca la imagen para verla en grande.</figcaption></figure>`:""}</div>`:""}
    <div class="note justify">Las fichas describen funciones y prácticas generales; no sustituyen el diseño aprobado, el manual de aeródromo, las cartas aeronáuticas ni los procedimientos locales.</div></div>`;
 }
 function navList(id){const r=window.__results||DATA;return r.some(s=>s.id===id)?r:DATA}
