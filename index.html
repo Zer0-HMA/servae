@@ -382,8 +382,7 @@ abbr.gl:hover::after,abbr.gl:focus::after{content:attr(data-def);position:absolu
 .team .tt .num{transform:none}
 .team .tb{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
 .team h3{font-size:20px}
-.team .tm{font-size:14px;font-weight:600}
-.team .tema{color:var(--muted);font-size:14.5px}
+.team h3 .tema{color:var(--muted);font-weight:600}
 .team .tp{height:6px;border-radius:6px;background:var(--cream-2);overflow:hidden;margin-top:auto}
 .team .tp i{display:block;height:100%;background:var(--utvt);border-radius:6px}
 .team .tf{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
@@ -623,7 +622,7 @@ footer h4 .u{box-shadow:inset 0 -6px 0 color-mix(in srgb,var(--utvt) 55%,transpa
     <div class="wrap">
       <div class="head">
         <h2 data-reveal>Equipos<br>del proyecto</h2>
-        <p class="justify" data-reveal style="--d:.15s">Grupo LA-41 · Servicios Aeroportuarios · Septiembre–Diciembre 2026. Cada equipo elaboró un bloque de fichas del índice general.</p>
+        <p class="justify" data-reveal style="--d:.15s">Grupo LA-41 · Servicios Aeroportuarios · Septiembre–Diciembre 2026. Cada grupo elaboró un bloque de fichas del índice general.</p>
       </div>
       <div class="teams-grid" id="teams-grid"></div>
     </div>
@@ -1910,13 +1909,13 @@ const ZONES=[
 ];
 const ZONE_OF={};ZONES.forEach(z=>z.f.forEach(n=>ZONE_OF[n]=z.id));
 const TEAMS=[
- {r:[1,23],t:"Equipo 1",m:"",tema:"Infraestructura del lado aire"},
- {r:[24,46],t:"Equipo 2",m:"",tema:"Instalaciones para pasajeros"},
- {r:[47,69],t:"Equipo 3",m:"",tema:"Servicios de rampa a la aeronave"},
- {r:[70,92],t:"Equipo · fichas 70–92",m:"Marlene González Arreola",tema:"Combustible, mantenimiento, carga y documentación"},
- {r:[93,115],t:"Equipo · fichas 93–115",m:"Darinka Fernanda Calderón Carbajal · Alondra Analhy Conde Dávila · Jabneel Gonzales Martínez · Josué Patiño Hilario",tema:"Atención al pasajero, seguridad y mantenimiento"},
- {r:[116,137],t:"Equipo 6",m:"",tema:"Seguridad, emergencias e instalaciones"},
- {r:[138,160],t:"Equipo 7",m:"",tema:"Servicios comerciales y complementarios"}
+ {r:[1,23],t:"Grupo 1",tema:"Infraestructura del lado aire"},
+ {r:[24,46],t:"Grupo 2",tema:"Instalaciones para pasajeros"},
+ {r:[47,69],t:"Grupo 3",tema:"Servicios de rampa a la aeronave"},
+ {r:[70,92],t:"Grupo 4",tema:"Combustible, mantenimiento, carga y documentación"},
+ {r:[93,115],t:"Grupo 5",tema:"Atención al pasajero, seguridad y mantenimiento"},
+ {r:[116,137],t:"Grupo 6",tema:"Seguridad, emergencias e instalaciones"},
+ {r:[138,160],t:"Grupo 7",tema:"Servicios comerciales y complementarios"}
 ];
 const GLOS={
  "OACI":"Organización de Aviación Civil Internacional (ICAO). Emite los Anexos y Documentos técnicos.",
@@ -2070,7 +2069,7 @@ document.addEventListener("click",e=>{if(e.target.id==="clr"||e.target.id==="clr
 (function(){
   const g=$("#teams-grid");if(!g)return;
   g.innerHTML=TEAMS.map((t,i)=>{const have=DATA.filter(s=>s.numero>=t.r[0]&&s.numero<=t.r[1]);const tot=t.r[1]-t.r[0]+1;const pct=Math.round(have.length/tot*100);const s=have[0];
-    return `<article class="team" data-reveal style="--d:${(i%3*.08).toFixed(2)}s"><div class="tt">${s?ilus(s):""}<span class="num">${pad(t.r[0])}–${pad(t.r[1])}</span></div><div class="tb"><h3>${esc(t.t)}</h3>${t.m?`<p class="tm">${esc(t.m)}</p>`:""}<p class="tema">${esc(t.tema)}</p><div class="tp"><i style="width:${pct}%"></i></div><div class="tf"><span><b>${have.length}</b> de ${tot} fichas</span><button class="pill pill-line" data-rng="${t.r[0]}-${t.r[1]}">Ver fichas</button></div></div></article>`}).join("");
+    return `<article class="team" data-reveal style="--d:${(i%3*.08).toFixed(2)}s"><div class="tt">${s?ilus(s):""}<span class="num">${pad(t.r[0])}–${pad(t.r[1])}</span></div><div class="tb"><h3>${esc(t.t)}<span class="tema"> · ${esc(t.tema)}</span></h3><div class="tp"><i style="width:${pct}%"></i></div><div class="tf"><span><b>${have.length}</b> de ${tot} fichas</span><button class="pill pill-line" data-rng="${t.r[0]}-${t.r[1]}">Ver fichas</button></div></div></article>`}).join("");
   g.addEventListener("click",e=>{const b=e.target.closest("[data-rng]");if(!b)return;const [a,c]=b.dataset.rng.split("-").map(Number);goCatalog({rng:[a,c]})});
   observe(g);if(ANIM_IO)g.querySelectorAll(".tt").forEach(t=>ANIM_IO.observe(t));
 })();
