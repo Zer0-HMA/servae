@@ -12,7 +12,6 @@ Guía didáctica e interactiva sobre los servicios e infraestructura de un aerop
 |---|---|
 | `index.html` | Diseño, estilos y lógica del sitio |
 | `servicios.json` | Contenido de las fichas técnicas (aquí se agrega la información) |
-| `img/fichas/` | Infografías de las fichas 01–23 (sección 8, Recursos visuales) |
 | `preview.jpg` | Imagen que aparece al compartir el link en redes |
 | `robots.txt`, `sitemap.xml` | Ayudan a que buscadores encuentren el sitio |
 
@@ -20,17 +19,25 @@ Guía didáctica e interactiva sobre los servicios e infraestructura de un aerop
 
 Edita `servicios.json` y agrega un objeto nuevo al arreglo, siguiendo la misma estructura que las fichas existentes (`id`, `numero`, `nombreTecnico`, `categoria`, `descripcion`, `equipos`, etc.). El `id` debe ser único y sin espacios, porque se usa en el link directo a la ficha (`#ficha-<id>`).
 
-Las fichas van en el arreglo **en orden de `numero`**, que es el orden del índice general (01 Pistas de aterrizaje y despegue, 02 Calles de rodaje, …).
+Las fichas van en el arreglo **en orden de `numero`**. El índice general (144 fichas) se divide en tres categorías:
 
-Campos opcionales:
+| Números | Categoría |
+|---|---|
+| 1–79 | Servicios aeroportuarios |
+| 80–135 | Servicios complementarios |
+| 136–144 | Servicios comerciales |
+
+Los números que aún no tienen ficha aparecen en el catálogo como "Ficha en elaboración".
+
+Campos que usa el sitio además del contenido:
 
 | Campo | Para qué sirve |
 |---|---|
-| `titulo` | Nombre corto del índice (p. ej. "Áreas de migración"); se muestra en tarjetas y búsqueda. Si falta, se usa `nombreTecnico`. |
-| `grupo` | Grupo general para el filtro del catálogo (Infraestructura aeroportuaria, Servicios al pasajero, …). La `categoria` original del equipo se sigue mostrando dentro de la ficha. |
-| `secuencia` | Lista de pasos de la secuencia operativa; aparece en la sección 8. |
-| `imagen` | Ruta a una imagen en `img/fichas/` (de preferencia `.webp`); aparece en la sección 8. |
-| `fuente` | Fuente de la información; aparece al final de la normativa. |
+| `ilus` | Número de la ilustración animada que se muestra en la ficha (las ilustraciones viven en `index.html`, en `ILUS`). Si falta, se usa una genérica. |
+| `zona` | Zona del mapa del aeropuerto donde aparece la ficha: `pista`, `rodaje`, `plataforma`, `terminal`, `comercios`, `tierra`, `carga`, `combustible`, `hangares`, `heli`, `control`, `sei` o `planta`. |
+| `ubicacion.lado` | `aire`, `tierra` o `mixto`; se usa en el filtro del catálogo. |
+
+Campos opcionales: `titulo` (nombre corto para tarjetas y búsqueda), `grupo` (agrupación distinta a `categoria` para el filtro), `secuencia`, `imagen` y `fuente`.
 
 Los campos vacíos (`""`) no se muestran en la ficha.
 
